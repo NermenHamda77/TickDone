@@ -20,7 +20,7 @@ class MyTheme {
         backgroundColor: Colors.transparent,
         elevation: 0,
         selectedItemColor: AppColors.brownColor,
-        unselectedItemColor: AppColors.secondaryTextColor,
+        unselectedItemColor: AppColors.whiteColor,
         showUnselectedLabels: false),
 /*    textButtonTheme: TextButtonThemeData(
       style: ButtonStyle(
