@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tick_done_app/new_task/add_new_task_screen.dart';
-import 'package:tick_done_app/settings/settings_tab.dart';
+import 'package:tick_done_app/profile/profile_tab.dart';
 import 'package:tick_done_app/tasks/tasks_tab.dart';
 import 'package:tick_done_app/theming/app_colors.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -48,15 +48,15 @@ class _HomeScreenState extends State<HomeScreen> {
               label:AppLocalizations.of(context)?.home,
             ),
             BottomNavigationBarItem(
-                icon: Icon(Icons.settings , size: 28),
-              label: AppLocalizations.of(context)?.settings,
+                icon: Icon(Icons.person_sharp , size: 28),
+              label: AppLocalizations.of(context)?.profile,
             ),
 
           ],
         ),
       ),
 
-      body: selectedIndex == 0 ? TasksTab() : SettingsTab()
+      body: selectedIndex == 0 ? TasksTab() : ProfileTab()
     );
   }
 }

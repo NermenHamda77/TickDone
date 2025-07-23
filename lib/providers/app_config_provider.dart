@@ -19,4 +19,12 @@ class AppConfigProvider extends ChangeNotifier{
     appMode = newMode;
     notifyListeners();
   }
+
+  bool isDarkMode(){
+    return appMode == ThemeMode.dark;
+  }
+
+  bool isEnglishLanguage(){
+    return appLanguage == "en";
+  }
 }

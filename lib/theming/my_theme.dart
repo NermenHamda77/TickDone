@@ -59,6 +59,11 @@ class MyTheme {
         fontWeight: FontWeight.w300,
         fontSize: 18,
       ),
+      labelLarge:  TextStyle(
+        color: AppColors.darkTextColor,
+        fontWeight: FontWeight.w700,
+        fontSize: 20,
+      ),
     ),
   );
 }
