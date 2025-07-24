@@ -28,6 +28,7 @@ class MyApp extends StatelessWidget {
 
       },
       themeMode: provider.appMode,
+      darkTheme: MyTheme.darkTheme,
 
       initialRoute: HomeScreen.routeName,
       locale: Locale(provider.appLanguage),

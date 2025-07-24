@@ -10,10 +10,14 @@ class AppColors{
   static const Color primaryDarkColor = Color(0xff895b2b);
   static const Color darkBeigeColor = Color(0xff8e7e6b);
   static const Color brownColor = Color(0xff6D5944);
-  static const Color greyColor = Color(0x358C8A8A);
+  static const Color greyColor = Color(0x64EAC89B);
+
+  static const Color lightWhiteColor = Color(0xb3ffffff);
+  static const Color beigeColor = Color(0xffC4B7A6);
 
   static const Color darkTextColor = Color(0xff3E2C1C);
   static const Color secondaryTextColor = Color(0xff7A6E63);
   static const Color textButtonColor = Color(0xff8C6E54);
 
+  static const Color lightBlackColor = Color(0xff262520);
 }
