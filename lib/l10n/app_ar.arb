@@ -21,5 +21,9 @@
 "date": "التاريخ",
 "home" : "الرئيسية",
 "save" : "حفظ",
-"appearance" : "المظهر"
+"appearance" : "المظهر",
+"profile" : "الملف الشخصي",
+"select_language" : "اختر اللغة",
+"select_mode" : "اختر الوضع",
+"exit" : "خروح"
 }
