@@ -8,19 +8,32 @@ import 'package:tick_done_app/theming/app_colors.dart';
 
 import '../providers/app_config_provider.dart';
 
-class NewTaskScreen extends StatefulWidget {
-  static const String routeName = "add_new_task_screen";
+class EditTaskScreen extends StatefulWidget {
+  static const String routeName = "edit_task_screen";
 
   @override
-  State<NewTaskScreen> createState() => _NewTaskScreenState();
+  State<EditTaskScreen> createState() => _EditTaskScreenState();
 }
 
-class _NewTaskScreenState extends State<NewTaskScreen> {
+class _EditTaskScreenState extends State<EditTaskScreen> {
   var selectedDate = DateTime.now();
   final formKey = GlobalKey<FormState>();
-  String title = '';
-  String description = '';
+
   late AppConfigProvider provider;
+  TextEditingController titleController = TextEditingController();
+  TextEditingController descController = TextEditingController();
+  Task? task;
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if(task == null){
+      Task taskArgs = ModalRoute.of(context)?.settings.arguments as Task;
+      task = taskArgs;
+      titleController.text = task!.title;
+      descController.text = task!.description;
+      selectedDate = task!.dateTime;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +55,7 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
             children: [
               Center(
                 child: Text(
-                  AppLocalizations.of(context)!.add_new_task,
+                  AppLocalizations.of(context)!.edit_task,
                   style: Theme.of(context).textTheme.bodyMedium,
                 ),
               ),
@@ -57,15 +70,13 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
                 height: 15,
               ),
               TextFormField(
-                validator: (text){
-                  if(text == null || text.trim().isEmpty){
+                validator: (text) {
+                  if (text == null || text.trim().isEmpty) {
                     return "Please enter a task title";
                   }
                   return null;
                 },
-                onChanged: (text){
-                  title = text;
-                },
+                controller: titleController,
                 decoration: InputDecoration(
                   hintText: AppLocalizations.of(context)!.enter_title,
                   hintStyle: Theme.of(context).textTheme.titleSmall,
@@ -95,15 +106,13 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
                 height: 15,
               ),
               TextFormField(
-                validator: (text){
-                  if(text == null || text.trim().isEmpty){
+                validator: (text) {
+                  if (text == null || text.trim().isEmpty) {
                     return "Please enter a task description";
                   }
                   return null;
                 },
-                onChanged: (text){
-                  description = text;
-                },
+                controller: descController,
                 decoration: InputDecoration(
                   hintText: AppLocalizations.of(context)!.enter_description,
                   hintStyle: Theme.of(context).textTheme.titleSmall,
@@ -126,7 +135,6 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
               SizedBox(
                 height: 30,
               ),
-
               Text(
                 AppLocalizations.of(context)!.date,
                 style: Theme.of(context).textTheme.bodySmall,
@@ -140,7 +148,8 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
                 child: Container(
                   padding: EdgeInsets.symmetric(vertical: 14, horizontal: 16),
                   decoration: BoxDecoration(
-                    border: Border.all(color: AppColors.primaryLightColor, width: 1.5),
+                    border: Border.all(
+                        color: AppColors.primaryLightColor, width: 1.5),
                     borderRadius: BorderRadius.circular(18),
                   ),
                   child: Row(
@@ -148,16 +157,17 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
                     children: [
                       Text(
                         DateFormat('EEE, dd MMM, yyyy').format(selectedDate),
-                        style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                          color: AppColors.darkTextColor,
-                        ),
+                        style:
+                            Theme.of(context).textTheme.titleMedium!.copyWith(
+                                  color: AppColors.darkTextColor,
+                                ),
                       ),
-                      Icon(Icons.calendar_month, color: AppColors.primaryLightColor),
+                      Icon(Icons.calendar_month,
+                          color: AppColors.primaryLightColor),
                     ],
                   ),
                 ),
               ),
-
               SizedBox(
                 height: 50,
               ),
@@ -165,16 +175,18 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
                 alignment: Alignment.center,
                 child: ElevatedButton(
                   onPressed: () {
-                    addTask();
+                    saveChanges();
                   },
                   child: Text(
-                    AppLocalizations.of(context)!.add_new_task,
-                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                      color: AppColors.whiteColor
-                    ),
+                    AppLocalizations.of(context)!.save_changes,
+                    style: Theme.of(context)
+                        .textTheme
+                        .titleMedium
+                        ?.copyWith(color: AppColors.whiteColor),
                   ),
                   style: ElevatedButton.styleFrom(
-                      padding: EdgeInsets.symmetric(vertical: 12, horizontal: 28),
+                      padding:
+                          EdgeInsets.symmetric(vertical: 12, horizontal: 28),
                       backgroundColor: Theme.of(context).primaryColor,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10),
@@ -187,34 +199,19 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
               TextButton(
                 onPressed: () {
                   Navigator.pop(context);
-
                 },
                 child: Text(
                   AppLocalizations.of(context)!.cancel,
-                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                    color: AppColors.textButtonColor
-                  ),
+                  style: Theme.of(context)
+                      .textTheme
+                      .titleMedium
+                      ?.copyWith(color: AppColors.textButtonColor),
                 ),
                 style: ButtonStyle(
                   overlayColor: MaterialStateProperty.all(
                       AppColors.primaryLightColor.withOpacity(0.1)),
-
                 ),
               ),
-            /*  ElevatedButton(
-                onPressed: () {},
-                child: Text(
-                  AppLocalizations.of(context)!.cancel,
-                  style: Theme.of(context).textTheme.titleMedium,
-                ),
-                style: ElevatedButton.styleFrom(
-                    padding: EdgeInsets.symmetric(vertical: 12, horizontal: 20),
-                      backgroundColor: AppColors.primaryLightColor,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    )
-                ),
-              ),*/
             ],
           ),
         ),
@@ -225,7 +222,7 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
   showCalender() async {
     var chosenDate = await showDatePicker(
         context: context,
-        initialDate: DateTime.now(),
+        initialDate: selectedDate,
         firstDate: DateTime.now(),
         lastDate: DateTime.now().add(Duration(days: 365)),
         builder: (context, child) {
@@ -235,14 +232,10 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
                   primary: Theme.of(context).primaryColor,
                   onPrimary: AppColors.whiteColor,
                   onSurface: AppColors.darkTextColor,
-
                 ),
                 textButtonTheme: TextButtonThemeData(
-                  style: TextButton.styleFrom(
-                    foregroundColor: AppColors.textButtonColor
-                  )
-                ),
-
+                    style: TextButton.styleFrom(
+                        foregroundColor: AppColors.textButtonColor)),
               ),
               child: child!);
         });
@@ -250,21 +243,20 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
     setState(() {});
   }
 
-  void addTask(){
-    if(formKey.currentState!.validate() == true){
+  void saveChanges() {
+    if (formKey.currentState!.validate() == true) {
       // add this task
-      Task task = Task(
-          title: title,
-          description: description,
-          dateTime: selectedDate
-      );
-      FirebaseUtils.addTaskToFireStore(task).timeout(Duration(seconds: 1) ,
-          onTimeout: (){
-            print("Task added successfully");
-            provider.getAllTasksFromFireStore();
-            Navigator.pop(context);
-          });
-
+      Task updatedTask = Task(
+          id: task!.id,
+          title: titleController.text,
+          description: descController.text,
+          dateTime: selectedDate);
+      FirebaseUtils.updateTaskInFireStore(updatedTask).timeout(Duration(seconds: 1),
+          onTimeout: () {
+        print("Task edited successfully");
+        provider.getAllTasksFromFireStore();
+        Navigator.pop(context);
+      });
     }
   }
 }

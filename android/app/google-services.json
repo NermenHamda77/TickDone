@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "948642296882",
+    "project_id": "tick-done-app",
+    "storage_bucket": "tick-done-app.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:948642296882:android:02838c0a33310ff74ef82b",
+        "android_client_info": {
+          "package_name": "com.example.tick_done_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAU-X3Q3pAxlabMrum9bp_CVKIXmUsxSmM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

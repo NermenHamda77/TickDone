@@ -25,5 +25,6 @@
 "profile" : "Profile",
 "select_language" : "Select Language",
 "select_mode" : "Select Mode",
-"exit" : "Exit"
+"exit" : "Exit",
+"save_changes" : "Save Changes"
 }
