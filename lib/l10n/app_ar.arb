@@ -25,5 +25,6 @@
 "profile" : "الملف الشخصي",
 "select_language" : "اختر اللغة",
 "select_mode" : "اختر الوضع",
-"exit" : "خروح"
+"exit" : "خروح",
+"save_changes" : "حفظ التغييرات"
 }

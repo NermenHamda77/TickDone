@@ -1,19 +1,32 @@
 import 'package:easy_date_timeline/easy_date_timeline.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:tick_done_app/providers/app_config_provider.dart';
 import 'package:tick_done_app/tasks/task_item.dart';
 import 'package:tick_done_app/theming/app_colors.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-class TasksTab extends StatelessWidget {
+
+class TasksTab extends StatefulWidget {
+  @override
+  State<TasksTab> createState() => _TasksTabState();
+}
+
+class _TasksTabState extends State<TasksTab> {
+ late AppConfigProvider provider;
 
   @override
   Widget build(BuildContext context) {
+    provider = Provider.of<AppConfigProvider>(context);
+    if(provider.tasks.isEmpty){
+      provider.getAllTasksFromFireStore();
+    }
     return Column(
       children: [
         EasyDateTimeLine(
-          initialDate: DateTime.now(),
+          initialDate: provider.selectedDate,
           onDateChange: (selectedDate) {
-            //`selectedDate` the new date selected.
+            provider.changeDateTime(selectedDate);
           },
           headerProps: const EasyHeaderProps(
             monthPickerType: MonthPickerType.dropDown,
@@ -56,13 +69,15 @@ class TasksTab extends StatelessWidget {
         Expanded(
           child: ListView.builder(
               itemBuilder: (context , index){
-               return TaskItem(taskTitle: "title1", taskDesc: "description1",);
+               return TaskItem(task: provider.tasks[index]);
               },
-            itemCount: 10,
+            itemCount: provider.tasks.length,
           ),
         )
       ],
 
     );
   }
+
+
 }

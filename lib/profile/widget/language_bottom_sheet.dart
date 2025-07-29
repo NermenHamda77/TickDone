@@ -135,7 +135,7 @@ class _LanguageBottomSheetModelState extends State<LanguageBottomSheetModel> {
         child: Row(
           children: [
             Icon(
-              Icons.light_mode,
+              Icons.language,
               size: 24,
               color: AppColors.secondaryTextColor,
             ),
