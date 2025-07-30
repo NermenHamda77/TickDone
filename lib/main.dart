@@ -4,12 +4,16 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:tick_done_app/authentication/signUpScreen.dart';
 import 'package:tick_done_app/edit_task/edit_task_screen.dart';
 import 'package:tick_done_app/home/home_screen.dart';
 import 'package:tick_done_app/new_task/add_new_task_screen.dart';
 import 'package:tick_done_app/providers/app_config_provider.dart';
 import 'package:tick_done_app/theming/my_theme.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
+import 'authentication/loginScreen.dart';
+
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -41,11 +45,12 @@ class MyApp extends StatelessWidget {
         HomeScreen.routeName: (context) => HomeScreen(),
         NewTaskScreen.routeName: (context) => NewTaskScreen(),
         EditTaskScreen.routeName: (context) => EditTaskScreen(),
-
+        SignUpScreen.routeName: (context) => SignUpScreen(),
+        LoginScreen.routeName: (context) => LoginScreen(),
       },
       themeMode: provider.appMode,
       darkTheme: MyTheme.darkTheme,
-      initialRoute: HomeScreen.routeName,
+      initialRoute: LoginScreen.routeName,
       locale: Locale(provider.appLanguage),
       debugShowCheckedModeBanner: false,
       localizationsDelegates: AppLocalizations.localizationsDelegates,

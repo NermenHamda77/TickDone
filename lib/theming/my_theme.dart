@@ -31,12 +31,12 @@ class MyTheme {
     textTheme: TextTheme(
       bodyLarge: GoogleFonts.italiana(
         color: AppColors.whiteColor,
-        fontSize: 30,
-        fontWeight: FontWeight.w800,
+        fontSize: 35,
+        fontWeight: FontWeight.bold,
       ),
       bodyMedium: TextStyle(
         color: AppColors.darkTextColor,
-        fontWeight: FontWeight.w700,
+        fontWeight: FontWeight.w600,
         fontSize: 24,
       ),
       bodySmall: TextStyle(
