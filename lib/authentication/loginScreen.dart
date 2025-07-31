@@ -1,10 +1,12 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:tick_done_app/authentication/custom_text_form_field.dart';
 import 'package:tick_done_app/authentication/signUpScreen.dart';
 
+import '../dialog_utils/dialog_utils.dart';
+import '../home/home_screen.dart';
 import '../theming/app_colors.dart';
-import 'build_password_rule.dart';
 
 class LoginScreen extends StatefulWidget {
   static const String routeName = "log_in_screen";
@@ -18,6 +20,7 @@ class _LoginScreenState extends State<LoginScreen> {
   TextEditingController passwordController = TextEditingController();
 
   TextEditingController emailController = TextEditingController();
+
 
   var formKey = GlobalKey<FormState>();
 
@@ -129,9 +132,57 @@ class _LoginScreenState extends State<LoginScreen> {
         ));
   }
 
-  void login() {
+  void login() async{
     if(formKey.currentState?.validate() == true){
       // login and go to home
+      DialogUtils.showLoading(context: context, message: "Loading...");
+      try {
+        final credential = await FirebaseAuth.instance.signInWithEmailAndPassword(
+            email: emailController.text,
+            password: passwordController.text
+        );
+        DialogUtils.hideLoading(context: context);
+        DialogUtils.showMessage(context: context, message: "Welcome Back!",
+            icon: Icon(Icons.check_circle_outline , color: Colors.greenAccent,),
+          posActionName: "Ok",
+          posActionFn: (){
+            Navigator.of(context).pushNamed(HomeScreen.routeName);
+          },
+          title: "Success",
+        );
+
+
+        print("----login-------------${credential.user?.uid ?? "no uid"}--------------------------");
+
+     } on FirebaseAuthException catch (e) {
+        if (e.code == 'invalid-credential') {
+          print('The supplied auth credential is incorrect, malformed or has expired.');
+          DialogUtils.hideLoading(context: context);
+          DialogUtils.showMessage(context: context,
+              message: "The supplied auth credential is incorrect, malformed or has expired.",
+              icon: Icon(Icons.error_outline_rounded , color: Colors.red,),
+            posActionName: "Ok",
+            title: "Error",);
+
+        }else if (e.code == 'network-request-failed') {
+          print('The supplied auth credential is incorrect, malformed or has expired.');
+          DialogUtils.hideLoading(context: context);
+          DialogUtils.showMessage(context: context,
+            message: "A network error (such as timeout, interrupted connection or unreachable host) has occurred.",
+            icon: Icon(Icons.error_outline_rounded , color: Colors.red,),
+            posActionName: "Ok",
+            title: "Error",);
+
+        }
+      }catch(e){
+        print(e.toString());
+        DialogUtils.hideLoading(context: context);
+        DialogUtils.showMessage(context: context, message: e.toString(),
+            icon: Icon(Icons.error_outline_rounded , color: Colors.red,),
+          posActionName: "Ok",
+          title: "Error",);
+
+      }
     }
 
   }

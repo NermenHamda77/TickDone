@@ -61,4 +61,50 @@ class AppConfigProvider extends ChangeNotifier{
     selectedDate = newSelectedDate;
     getAllTasksFromFireStore();
   }
+
+  void filterCompletedTasks() async{
+    QuerySnapshot<Task>  snapshot = await FirebaseUtils.getTasksCollections().get();
+    List<Task> tasksList = snapshot.docs.map((doc){
+      return doc.data();
+    }).toList();
+
+
+    tasksList = tasksList.where((task) {
+      return task.dateTime.day == selectedDate.day &&
+          task.dateTime.month == selectedDate.month &&
+          task.dateTime.year == selectedDate.year &&
+          task.isDone == true ;
+
+    }).toList();
+
+    tasksList.sort((Task task1 , Task task2){
+      return task1.dateTime.compareTo(task2.dateTime);
+    });
+    tasks = tasksList;
+    notifyListeners();
+
+  }
+  void filterPendingTasks() async{
+    QuerySnapshot<Task>  snapshot = await FirebaseUtils.getTasksCollections().get();
+    List<Task> tasksList = snapshot.docs.map((doc){
+      return doc.data();
+    }).toList();
+
+
+    tasksList = tasksList.where((task) {
+      return task.dateTime.day == selectedDate.day &&
+          task.dateTime.month == selectedDate.month &&
+          task.dateTime.year == selectedDate.year &&
+          task.isDone == false ;
+
+    }).toList();
+
+    tasksList.sort((Task task1 , Task task2){
+      return task1.dateTime.compareTo(task2.dateTime);
+    });
+    tasks = tasksList;
+    notifyListeners();
+
+  }
+
 }

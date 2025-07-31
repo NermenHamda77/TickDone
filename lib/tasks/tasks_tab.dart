@@ -14,6 +14,8 @@ class TasksTab extends StatefulWidget {
 
 class _TasksTabState extends State<TasksTab> {
  late AppConfigProvider provider;
+ var menuKey = GlobalKey();
+ String chosenOption = '';
 
   @override
   Widget build(BuildContext context) {
@@ -33,9 +35,20 @@ class _TasksTabState extends State<TasksTab> {
             dateFormatter: DateFormatter.fullDateDMonthAsStrY(),
           ),
           dayProps: const EasyDayProps(
+
             dayStructure: DayStructure.dayStrDayNumMonth,
             activeDayStyle: DayStyle(
+              /*dayNumStyle: TextStyle(
+                color: Colors.red,
+              ),
+              dayStrStyle: TextStyle(
+                color: Colors.deepPurple,
+              ),
+              monthStrStyle:  TextStyle(
+                color: Colors.blue,
+              ),*/
               decoration: BoxDecoration(
+               // color: ,  // color of day number
                 borderRadius: BorderRadius.all(Radius.circular(8)),
                 gradient: LinearGradient(
                   begin: Alignment.topCenter,
@@ -47,7 +60,22 @@ class _TasksTabState extends State<TasksTab> {
                 ),
               ),
             ),
+/*
+            inactiveDayStyle: DayStyle(
+              dayNumStyle: TextStyle(
+                color: Colors.orange,
+              ),
+              dayStrStyle: TextStyle(
+                color: Colors.yellow,
+              ),
+              monthStrStyle:  TextStyle(
+                color: Colors.green,
+              ),
+            )
+*/
           ),
+
+
         ),
 
         SizedBox(height: 10,),
@@ -56,11 +84,18 @@ class _TasksTabState extends State<TasksTab> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(AppLocalizations.of(context)!.all_tasks ,
+              Text(
+                chosenOption.trim().isEmpty ?
+                AppLocalizations.of(context)!.all_tasks :
+                chosenOption,
               style: Theme.of(context).textTheme.bodyMedium,),
               IconButton(
-                onPressed: (){},
-                icon: Icon(Icons.filter_list_off_sharp, size: 28, color: AppColors.primaryLightColor,),
+                key: menuKey,
+                onPressed: (){
+                  /// Filter Tasks => All Tasks , Completed Tasks , Pending Tasks
+                  showFilterMenu();
+                },
+                icon: Icon(Icons.filter_list, size: 28, color: AppColors.primaryLightColor,),
               ),
             ],
           ),
@@ -77,6 +112,67 @@ class _TasksTabState extends State<TasksTab> {
       ],
 
     );
+  }
+
+  showFilterMenu(){
+    final RenderBox button = menuKey.currentContext!.findRenderObject() as RenderBox;
+    final RenderBox overlay = Overlay.of(context).context.findRenderObject() as RenderBox;
+    final Offset position = button.localToGlobal(Offset.zero , ancestor: overlay);
+    showMenu(
+        context: context,
+        position: RelativeRect.fromLTRB(
+            position.dx,
+            position.dx + button.size.height,
+            position.dx + button.size.width,
+            0),
+        items: [
+          PopupMenuItem(
+              child:TextButton(
+                onPressed: (){
+                  // show all tasks
+                  setState(() {
+                    provider.getAllTasksFromFireStore();
+                    chosenOption = AppLocalizations.of(context)!.all_tasks;
+                    Navigator.pop(context);
+                  });
+
+                },
+                child: Text(AppLocalizations.of(context)!.all_tasks,
+                  style: Theme.of(context).textTheme.titleLarge,),
+              )
+          ),
+          PopupMenuItem(
+              child:TextButton(
+                onPressed: (){
+                  // show pending tasks
+                  setState(() {
+                    provider.filterPendingTasks();
+                    chosenOption = AppLocalizations.of(context)!.pending_tasks;
+                    Navigator.pop(context);
+
+                  });
+                },
+                child: Text(AppLocalizations.of(context)!.pending_tasks,
+                  style: Theme.of(context).textTheme.titleLarge,),
+              )
+          ),
+          PopupMenuItem(
+              child:TextButton(
+                onPressed: (){
+                  // show completed tasks
+                  setState(() {
+                    provider.filterCompletedTasks();
+                    chosenOption = AppLocalizations.of(context)!.completed_tasks;
+                    Navigator.pop(context);
+                  });
+
+                },
+                child: Text(AppLocalizations.of(context)!.completed_tasks ,
+                style: Theme.of(context).textTheme.titleLarge,),
+              )
+          ),
+        ]);
+
   }
 
 

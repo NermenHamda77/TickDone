@@ -1,7 +1,8 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:tick_done_app/authentication/custom_text_form_field.dart';
-
+import 'package:tick_done_app/dialog_utils/dialog_utils.dart';
 import '../theming/app_colors.dart';
 import 'build_password_rule.dart';
 import 'loginScreen.dart';
@@ -16,12 +17,14 @@ class SignUpScreen extends StatefulWidget {
 class _SignUpScreenState extends State<SignUpScreen> {
   TextEditingController nameController = TextEditingController();
 
-  TextEditingController passwordController = TextEditingController();
+  TextEditingController passwordController =
+      TextEditingController();
 
-  TextEditingController emailController = TextEditingController();
+  TextEditingController emailController =
+      TextEditingController();
 
-  TextEditingController confirmPasswordController = TextEditingController();
-
+  TextEditingController confirmPasswordController =
+      TextEditingController();
 
   var formKey = GlobalKey<FormState>();
 
@@ -52,8 +55,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 ),
                 CustomTextFormField(
                   label: AppLocalizations.of(context)!.user_name,
-                  validator:  (text) {
-                    if(text == null || text.trim().isEmpty ){
+                  validator: (text) {
+                    if (text == null || text.trim().isEmpty) {
                       return "Please enter Username";
                     }
                     return null;
@@ -62,8 +65,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 ),
                 CustomTextFormField(
                   label: AppLocalizations.of(context)!.email,
-                  validator:  (text) {
-                    if(text == null || text.trim().isEmpty ){
+                  validator: (text) {
+                    if (text == null || text.trim().isEmpty) {
                       return "Please enter Email";
                     }
                     final RegExp emailRegex = RegExp(
@@ -80,7 +83,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 CustomTextFormField(
                   label: AppLocalizations.of(context)!.password,
                   validator: (text) {
-                    if(text == null || text.trim().isEmpty ){
+                    if (text == null || text.trim().isEmpty) {
                       return "Please enter Password";
                     }
                     final RegExp passwordRegEx = RegExp(
@@ -92,29 +95,25 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     }
                     return null;
                   },
-                  onChange: (text){
-                    setState(() {
-                    });
-
+                  onChange: (text) {
+                    setState(() {});
                   },
                   controller: passwordController,
                   obscureText: true,
                 ),
-
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 18),
                   child: PasswordRulesWidget(
                     password: passwordController.text,
                   ),
                 ),
-
                 CustomTextFormField(
                   label: AppLocalizations.of(context)!.confirm_password,
-                  validator:  (text) {
-                    if(text == null || text.trim().isEmpty ){
+                  validator: (text) {
+                    if (text == null || text.trim().isEmpty) {
                       return "Please enter Confirm Password";
                     }
-                    if(text != passwordController.text){
+                    if (text != passwordController.text) {
                       return "Confirm Password doesn't match with Password";
                     }
                     return null;
@@ -139,12 +138,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         backgroundColor: Theme.of(context).primaryColor),
                   ),
                 ),
-
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text(AppLocalizations.of(context)!.already_have_an_account,
-                    style: Theme.of(context).textTheme.titleSmall,),
+                    Text(
+                      AppLocalizations.of(context)!.already_have_an_account,
+                      style: Theme.of(context).textTheme.titleSmall,
+                    ),
                     TextButton(
                       onPressed: () {
                         Navigator.of(context).pushNamed(LoginScreen.routeName);
@@ -161,7 +161,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             AppColors.primaryLightColor.withOpacity(0.1)),
                       ),
                     ),
-
                   ],
                 ),
               ],
@@ -170,10 +169,90 @@ class _SignUpScreenState extends State<SignUpScreen> {
         ));
   }
 
-  void register() {
-    if(formKey.currentState?.validate() == true){
+  void register() async {
+    if (formKey.currentState?.validate() == true) {
       // create account
-    }
+      DialogUtils.showLoading(context: context, message: "Loading...");
+      try {
+        final credential =
+            await FirebaseAuth.instance.createUserWithEmailAndPassword(
+          email: emailController.text,
+          password: passwordController.text,
+        );
+        DialogUtils.hideLoading(context: context);
+        DialogUtils.showMessage(
+          context: context,
+          message: "Account created successfully!",
+          icon: Icon(
+            Icons.check_circle_outline,
+            color: Colors.greenAccent,
+          ),
+          posActionName: "Ok",
+          posActionFn: () {
+            Navigator.of(context).pushNamed(LoginScreen.routeName);
+          },
+          title: "Success",
+        );
 
+        print(
+            "-------signup----------${credential.user?.uid ?? "no uid"}--------------------------");
+      } on FirebaseAuthException catch (e) {
+        if (e.code == 'weak-password') {
+          print('The password provided is too weak.');
+          DialogUtils.hideLoading(context: context);
+          DialogUtils.showMessage(
+            context: context,
+            message: "The password provided is too weak.",
+            icon: Icon(
+              Icons.error_outline_rounded,
+              color: Colors.red,
+            ),
+            posActionName: "Ok",
+            title: "Error",
+          );
+        } else if (e.code == 'email-already-in-use') {
+          print('The account already exists for that email.');
+          DialogUtils.hideLoading(context: context);
+          DialogUtils.showMessage(
+            context: context,
+            message: "The account already exists for that email.",
+            icon: Icon(
+              Icons.error_outline_rounded,
+              color: Colors.red,
+            ),
+            posActionName: "Ok",
+            title: "Error",
+          );
+        } else if (e.code == 'network-request-failed') {
+          print(
+              'The supplied auth credential is incorrect, malformed or has expired.');
+          DialogUtils.hideLoading(context: context);
+          DialogUtils.showMessage(
+            context: context,
+            message:
+                "A network error (such as timeout, interrupted connection or unreachable host) has occurred.",
+            icon: Icon(
+              Icons.error_outline_rounded,
+              color: Colors.red,
+            ),
+            posActionName: "Ok",
+            title: "Error",
+          );
+        }
+      } catch (e) {
+        print(e.toString());
+        DialogUtils.hideLoading(context: context);
+        DialogUtils.showMessage(
+          context: context,
+          message: e.toString(),
+          icon: Icon(
+            Icons.error_outline_rounded,
+            color: Colors.red,
+          ),
+          posActionName: "Ok",
+          title: "Error",
+        );
+      }
+    }
   }
 }

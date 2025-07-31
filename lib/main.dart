@@ -50,7 +50,7 @@ class MyApp extends StatelessWidget {
       },
       themeMode: provider.appMode,
       darkTheme: MyTheme.darkTheme,
-      initialRoute: LoginScreen.routeName,
+      initialRoute: SignUpScreen.routeName,
       locale: Locale(provider.appLanguage),
       debugShowCheckedModeBanner: false,
       localizationsDelegates: AppLocalizations.localizationsDelegates,
