@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:tick_done_app/authentication/custom_text_form_field.dart';
 import 'package:tick_done_app/dialog_utils/dialog_utils.dart';
+import 'package:tick_done_app/firebase_utils/firebase_utils.dart';
+import 'package:tick_done_app/model/my_user.dart';
 import '../theming/app_colors.dart';
 import 'build_password_rule.dart';
 import 'loginScreen.dart';
@@ -179,6 +181,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
           email: emailController.text,
           password: passwordController.text,
         );
+        MyUser myUser = MyUser(
+            id: credential.user?.uid ?? "",
+            name: nameController.text,
+            email: emailController.text
+        );
+        await FirebaseUtils.addUserToFireStore(myUser);
+
         DialogUtils.hideLoading(context: context);
         DialogUtils.showMessage(
           context: context,
@@ -189,7 +198,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
           ),
           posActionName: "Ok",
           posActionFn: () {
-            Navigator.of(context).pushNamed(LoginScreen.routeName);
+            Navigator.of(context).pushReplacementNamed(LoginScreen.routeName);
           },
           title: "Success",
         );

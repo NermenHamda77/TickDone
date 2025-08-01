@@ -3,7 +3,8 @@ import 'package:provider/provider.dart';
 import 'package:tick_done_app/edit_task/edit_task_screen.dart';
 import 'package:tick_done_app/firebase_utils/firebase_utils.dart';
 import 'package:tick_done_app/model/task_model.dart';
-import 'package:tick_done_app/theming/app_colors.dart';
+import 'package:tick_done_app/providers/auth_user_provider.dart';
+import 'package:tick_done_app/providers/tasks_provider.dart';
 
 import '../providers/app_config_provider.dart';
 
@@ -17,10 +18,16 @@ class TaskItem extends StatefulWidget {
 
 class _TaskItemState extends State<TaskItem> {
   late AppConfigProvider provider;
+  late AuthUserProvider userProvider;
+  late TasksProvider tasksProvider;
+
 
   @override
   Widget build(BuildContext context) {
     provider = Provider.of<AppConfigProvider>(context);
+    userProvider = Provider.of<AuthUserProvider>(context);
+    tasksProvider = Provider.of<TasksProvider>(context);
+
     return Container(
       margin: EdgeInsets.symmetric(vertical: 5 , horizontal: 10),
       decoration: BoxDecoration(
@@ -58,7 +65,13 @@ class _TaskItemState extends State<TaskItem> {
 
           IconButton(
             onPressed: (){
-              FirebaseUtils.completeTaskInFireStore(widget.task).timeout(
+              FirebaseUtils.completeTaskInFireStore(widget.task , userProvider.currentUser!.id!)
+                  .then((value){
+                setState(() {
+
+                });
+              })
+                  .timeout(
                 Duration(seconds: 1), onTimeout: (){
                   print("Task is completed successfully");
               }
@@ -77,11 +90,16 @@ class _TaskItemState extends State<TaskItem> {
 
           IconButton(
             onPressed: (){
-              FirebaseUtils.deleteTaskFromFireStore(widget.task).timeout(
+              FirebaseUtils.deleteTaskFromFireStore(widget.task , userProvider.currentUser!.id!)
+                  .then((value){
+                tasksProvider.getAllTasksFromFireStore(userProvider.currentUser!.id!);
+
+              })
+                  .timeout(
                   Duration(seconds: 1) , onTimeout: (){
                     print("Task is deleted successfully");
               });
-              provider.getAllTasksFromFireStore();
+              tasksProvider.getAllTasksFromFireStore(userProvider.currentUser!.id!);
 
             },
             icon: Icon(Icons.cancel_outlined, size: 28,),

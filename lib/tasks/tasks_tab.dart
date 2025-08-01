@@ -6,6 +6,9 @@ import 'package:tick_done_app/tasks/task_item.dart';
 import 'package:tick_done_app/theming/app_colors.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+import '../providers/auth_user_provider.dart';
+import '../providers/tasks_provider.dart';
+
 
 class TasksTab extends StatefulWidget {
   @override
@@ -16,19 +19,23 @@ class _TasksTabState extends State<TasksTab> {
  late AppConfigProvider provider;
  var menuKey = GlobalKey();
  String chosenOption = '';
-
+ late AuthUserProvider userProvider;
+ late TasksProvider tasksProvider;
   @override
   Widget build(BuildContext context) {
     provider = Provider.of<AppConfigProvider>(context);
-    if(provider.tasks.isEmpty){
-      provider.getAllTasksFromFireStore();
+    userProvider = Provider.of<AuthUserProvider>(context);
+    tasksProvider = Provider.of<TasksProvider>(context);
+
+    if(tasksProvider.tasks.isEmpty){
+      tasksProvider.getAllTasksFromFireStore(userProvider.currentUser!.id!);
     }
     return Column(
       children: [
         EasyDateTimeLine(
-          initialDate: provider.selectedDate,
+          initialDate: tasksProvider.selectedDate,
           onDateChange: (selectedDate) {
-            provider.changeDateTime(selectedDate);
+            tasksProvider.changeDateTime(selectedDate , userProvider.currentUser!.id!);
           },
           headerProps: const EasyHeaderProps(
             monthPickerType: MonthPickerType.dropDown,
@@ -79,6 +86,10 @@ class _TasksTabState extends State<TasksTab> {
         ),
 
         SizedBox(height: 10,),
+        Divider(
+          thickness: 1,
+          color: AppColors.lightBeigeColor,
+        ),
         Padding(
           padding: const EdgeInsets.all(8.0),
           child: Row(
@@ -101,12 +112,18 @@ class _TasksTabState extends State<TasksTab> {
           ),
 
         ),
+        Divider(
+          thickness: 2,
+          color: AppColors.lightBeigeColor,
+        ),
+        SizedBox(height: 10,),
+
         Expanded(
           child: ListView.builder(
               itemBuilder: (context , index){
-               return TaskItem(task: provider.tasks[index]);
+               return TaskItem(task: tasksProvider.tasks[index]);
               },
-            itemCount: provider.tasks.length,
+            itemCount: tasksProvider.tasks.length,
           ),
         )
       ],
@@ -131,7 +148,7 @@ class _TasksTabState extends State<TasksTab> {
                 onPressed: (){
                   // show all tasks
                   setState(() {
-                    provider.getAllTasksFromFireStore();
+                    tasksProvider.getAllTasksFromFireStore(userProvider.currentUser!.id!);
                     chosenOption = AppLocalizations.of(context)!.all_tasks;
                     Navigator.pop(context);
                   });
@@ -146,7 +163,7 @@ class _TasksTabState extends State<TasksTab> {
                 onPressed: (){
                   // show pending tasks
                   setState(() {
-                    provider.filterPendingTasks();
+                    tasksProvider.filterPendingTasks(userProvider.currentUser!.id!);
                     chosenOption = AppLocalizations.of(context)!.pending_tasks;
                     Navigator.pop(context);
 
@@ -161,7 +178,7 @@ class _TasksTabState extends State<TasksTab> {
                 onPressed: (){
                   // show completed tasks
                   setState(() {
-                    provider.filterCompletedTasks();
+                    tasksProvider.filterCompletedTasks(userProvider.currentUser!.id!);
                     chosenOption = AppLocalizations.of(context)!.completed_tasks;
                     Navigator.pop(context);
                   });

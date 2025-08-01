@@ -7,6 +7,8 @@ import 'package:tick_done_app/model/task_model.dart';
 import 'package:tick_done_app/theming/app_colors.dart';
 
 import '../providers/app_config_provider.dart';
+import '../providers/auth_user_provider.dart';
+import '../providers/tasks_provider.dart';
 
 class NewTaskScreen extends StatefulWidget {
   static const String routeName = "add_new_task_screen";
@@ -21,10 +23,13 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
   String title = '';
   String description = '';
   late AppConfigProvider provider;
-
+  late AuthUserProvider userProvider;
+  late TasksProvider tasksProvider;
   @override
   Widget build(BuildContext context) {
     provider = Provider.of<AppConfigProvider>(context);
+    userProvider = Provider.of<AuthUserProvider>(context);
+    tasksProvider = Provider.of<TasksProvider>(context);
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
@@ -258,11 +263,18 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
           description: description,
           dateTime: selectedDate
       );
-      FirebaseUtils.addTaskToFireStore(task).timeout(Duration(seconds: 1) ,
+      FirebaseUtils.addTaskToFireStore(task , userProvider.currentUser!.id!)
+      .then((value) {
+        print("Task added successfully");
+        tasksProvider.getAllTasksFromFireStore(userProvider.currentUser!.id!);
+        Navigator.pop(context);
+      })
+          .timeout(Duration(seconds: 1) ,
           onTimeout: (){
             print("Task added successfully");
-            provider.getAllTasksFromFireStore();
+            tasksProvider.getAllTasksFromFireStore(userProvider.currentUser!.id!);
             Navigator.pop(context);
+
           });
 
     }

@@ -1,11 +1,14 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:provider/provider.dart';
 import 'package:tick_done_app/authentication/custom_text_form_field.dart';
 import 'package:tick_done_app/authentication/signUpScreen.dart';
+import 'package:tick_done_app/firebase_utils/firebase_utils.dart';
 
 import '../dialog_utils/dialog_utils.dart';
 import '../home/home_screen.dart';
+import '../providers/auth_user_provider.dart';
 import '../theming/app_colors.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -16,11 +19,9 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-
   TextEditingController passwordController = TextEditingController();
 
   TextEditingController emailController = TextEditingController();
-
 
   var formKey = GlobalKey<FormState>();
 
@@ -49,11 +50,10 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                   ),
                 ),
-
                 CustomTextFormField(
                   label: AppLocalizations.of(context)!.email,
-                  validator:  (text) {
-                    if(text == null || text.trim().isEmpty ){
+                  validator: (text) {
+                    if (text == null || text.trim().isEmpty) {
                       return "Please enter Email";
                     }
                     final RegExp emailRegex = RegExp(
@@ -70,21 +70,17 @@ class _LoginScreenState extends State<LoginScreen> {
                 CustomTextFormField(
                   label: AppLocalizations.of(context)!.password,
                   validator: (text) {
-                    if(text == null || text.trim().isEmpty ){
+                    if (text == null || text.trim().isEmpty) {
                       return "Please enter Password";
                     }
                     return null;
                   },
-                  onChange: (text){
-                    setState(() {
-                    });
-
+                  onChange: (text) {
+                    setState(() {});
                   },
                   controller: passwordController,
                   obscureText: true,
                 ),
-
-
                 SizedBox(
                   height: 30,
                 ),
@@ -105,8 +101,10 @@ class _LoginScreenState extends State<LoginScreen> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text(AppLocalizations.of(context)!.dont_have_an_account,
-                      style: Theme.of(context).textTheme.titleSmall,),
+                    Text(
+                      AppLocalizations.of(context)!.dont_have_an_account,
+                      style: Theme.of(context).textTheme.titleSmall,
+                    ),
                     TextButton(
                       onPressed: () {
                         Navigator.of(context).pushNamed(SignUpScreen.routeName);
@@ -123,7 +121,6 @@ class _LoginScreenState extends State<LoginScreen> {
                             AppColors.primaryLightColor.withOpacity(0.1)),
                       ),
                     ),
-
                   ],
                 ),
               ],
@@ -132,58 +129,84 @@ class _LoginScreenState extends State<LoginScreen> {
         ));
   }
 
-  void login() async{
-    if(formKey.currentState?.validate() == true){
+  void login() async {
+    if (formKey.currentState?.validate() == true) {
       // login and go to home
       DialogUtils.showLoading(context: context, message: "Loading...");
       try {
-        final credential = await FirebaseAuth.instance.signInWithEmailAndPassword(
-            email: emailController.text,
-            password: passwordController.text
-        );
+        final credential = await FirebaseAuth.instance
+            .signInWithEmailAndPassword(
+                email: emailController.text, password: passwordController.text);
+        var user = await FirebaseUtils.getUserFromFireStore(
+            credential.user?.uid ?? "");
+        if (user == null) {
+          return;
+        }
+        var userProvider = Provider.of<AuthUserProvider>(context , listen: false);
+        userProvider.updateUser(user);
         DialogUtils.hideLoading(context: context);
-        DialogUtils.showMessage(context: context, message: "Welcome Back!",
-            icon: Icon(Icons.check_circle_outline , color: Colors.greenAccent,),
+        DialogUtils.showMessage(
+          context: context,
+          message: "Welcome Back!",
+          icon: Icon(
+            Icons.check_circle_outline,
+            color: Colors.greenAccent,
+          ),
           posActionName: "Ok",
-          posActionFn: (){
-            Navigator.of(context).pushNamed(HomeScreen.routeName);
+          posActionFn: () {
+            Navigator.of(context).pushReplacementNamed(HomeScreen.routeName);
           },
           title: "Success",
         );
 
-
-        print("----login-------------${credential.user?.uid ?? "no uid"}--------------------------");
-
-     } on FirebaseAuthException catch (e) {
+        print(
+            "----login-------------${credential.user?.uid ?? "no uid"}--------------------------");
+      } on FirebaseAuthException catch (e) {
         if (e.code == 'invalid-credential') {
-          print('The supplied auth credential is incorrect, malformed or has expired.');
+          print(
+              'The supplied auth credential is incorrect, malformed or has expired.');
           DialogUtils.hideLoading(context: context);
-          DialogUtils.showMessage(context: context,
-              message: "The supplied auth credential is incorrect, malformed or has expired.",
-              icon: Icon(Icons.error_outline_rounded , color: Colors.red,),
+          DialogUtils.showMessage(
+            context: context,
+            message:
+                "The supplied auth credential is incorrect, malformed or has expired.",
+            icon: Icon(
+              Icons.error_outline_rounded,
+              color: Colors.red,
+            ),
             posActionName: "Ok",
-            title: "Error",);
-
-        }else if (e.code == 'network-request-failed') {
-          print('The supplied auth credential is incorrect, malformed or has expired.');
+            title: "Error",
+          );
+        } else if (e.code == 'network-request-failed') {
+          print(
+              'The supplied auth credential is incorrect, malformed or has expired.');
           DialogUtils.hideLoading(context: context);
-          DialogUtils.showMessage(context: context,
-            message: "A network error (such as timeout, interrupted connection or unreachable host) has occurred.",
-            icon: Icon(Icons.error_outline_rounded , color: Colors.red,),
+          DialogUtils.showMessage(
+            context: context,
+            message:
+                "A network error (such as timeout, interrupted connection or unreachable host) has occurred.",
+            icon: Icon(
+              Icons.error_outline_rounded,
+              color: Colors.red,
+            ),
             posActionName: "Ok",
-            title: "Error",);
-
+            title: "Error",
+          );
         }
-      }catch(e){
+      } catch (e) {
         print(e.toString());
         DialogUtils.hideLoading(context: context);
-        DialogUtils.showMessage(context: context, message: e.toString(),
-            icon: Icon(Icons.error_outline_rounded , color: Colors.red,),
+        DialogUtils.showMessage(
+          context: context,
+          message: e.toString(),
+          icon: Icon(
+            Icons.error_outline_rounded,
+            color: Colors.red,
+          ),
           posActionName: "Ok",
-          title: "Error",);
-
+          title: "Error",
+        );
       }
     }
-
   }
 }
