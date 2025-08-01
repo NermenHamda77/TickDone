@@ -36,5 +36,6 @@
 "password" : "Password",
 "confirm_password" : "Confirm Password",
 "already_have_an_account" : "Already have an Account?",
-"dont_have_an_account" : "Don't have an Account?"
+"dont_have_an_account" : "Don't have an Account?",
+"log_out" : "Log Out"
 }

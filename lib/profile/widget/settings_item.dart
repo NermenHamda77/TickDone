@@ -35,7 +35,7 @@ class SettingsItemRow extends StatelessWidget {
 
             Text(value,
               style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                  color: AppColors.secondaryTextColor
+                  color: AppColors.darkBeigeColor
               ),),
             Icon(Icons.arrow_drop_down , size: 24, color: AppColors.darkTextColor),
           ],

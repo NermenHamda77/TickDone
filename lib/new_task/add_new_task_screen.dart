@@ -267,6 +267,9 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
       .then((value) {
         print("Task added successfully");
         tasksProvider.getAllTasksFromFireStore(userProvider.currentUser!.id!);
+        var taskProvider = Provider.of<TasksProvider>(context , listen: false);
+
+        taskProvider.getAllUserTasksFromFireStore(userProvider.currentUser!.id!);
         Navigator.pop(context);
       })
           .timeout(Duration(seconds: 1) ,

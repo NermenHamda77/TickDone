@@ -7,6 +7,7 @@ import '../model/task_model.dart';
 class TasksProvider extends ChangeNotifier{
   List<Task> tasks = [];
   DateTime selectedDate = DateTime.now();
+  List<Task> allUserTasks = [];
 
   void getAllTasksFromFireStore(String uId) async{
     QuerySnapshot<Task> snapshot = await FirebaseUtils.getTasksCollections(uId).get();
@@ -79,5 +80,27 @@ class TasksProvider extends ChangeNotifier{
     tasks = tasksList;
     notifyListeners();
 
+  }
+  void getAllUserTasksFromFireStore(String uId) async{
+    QuerySnapshot<Task> snapshot = await FirebaseUtils.getTasksCollections(uId).get();
+    //List<QueryDocumentSnapshot<Task>>   =>   List<Task>
+    List<Task> tasksList = snapshot.docs.map((doc){
+      return doc.data();
+    }).toList();
+    allUserTasks = tasksList;
+    notifyListeners();
+  }
+
+  int completedTasksCount(String uId){
+    return allUserTasks.where((task) => task.isDone == true).length;
+  }
+
+  int pendingTasksCount(String uId){
+    return
+      allUserTasks.where((task) => task.isDone == false).length;
+  }
+
+  int allTasksCount(String uId){
+    return allUserTasks.length;
   }
 }

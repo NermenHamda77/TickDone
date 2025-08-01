@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:tick_done_app/authentication/custom_text_form_field.dart';
 import 'package:tick_done_app/authentication/signUpScreen.dart';
 import 'package:tick_done_app/firebase_utils/firebase_utils.dart';
+import 'package:tick_done_app/providers/tasks_provider.dart';
 
 import '../dialog_utils/dialog_utils.dart';
 import '../home/home_screen.dart';
@@ -144,6 +145,10 @@ class _LoginScreenState extends State<LoginScreen> {
         }
         var userProvider = Provider.of<AuthUserProvider>(context , listen: false);
         userProvider.updateUser(user);
+        var taskProvider = Provider.of<TasksProvider>(context , listen: false);
+
+        taskProvider.getAllUserTasksFromFireStore(user.id ?? "");
+
         DialogUtils.hideLoading(context: context);
         DialogUtils.showMessage(
           context: context,

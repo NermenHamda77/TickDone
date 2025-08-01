@@ -85,11 +85,7 @@ class _TasksTabState extends State<TasksTab> {
 
         ),
 
-        SizedBox(height: 10,),
-        Divider(
-          thickness: 1,
-          color: AppColors.lightBeigeColor,
-        ),
+
         Padding(
           padding: const EdgeInsets.all(8.0),
           child: Row(
@@ -112,11 +108,7 @@ class _TasksTabState extends State<TasksTab> {
           ),
 
         ),
-        Divider(
-          thickness: 2,
-          color: AppColors.lightBeigeColor,
-        ),
-        SizedBox(height: 10,),
+
 
         Expanded(
           child: ListView.builder(

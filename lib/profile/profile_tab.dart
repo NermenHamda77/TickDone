@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:tick_done_app/authentication/loginScreen.dart';
+import 'package:tick_done_app/profile/widget/app_info_item.dart';
 import 'package:tick_done_app/profile/widget/language_bottom_sheet.dart';
 import 'package:tick_done_app/profile/widget/mode_bottom_sheet.dart';
 import 'package:tick_done_app/profile/widget/settings_item.dart';
+import 'package:tick_done_app/providers/tasks_provider.dart';
 import 'package:tick_done_app/theming/app_colors.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -17,10 +20,11 @@ class ProfileTab extends StatefulWidget {
 
 class _ProfileTabState extends State<ProfileTab> {
   late AuthUserProvider userProvider;
-
+  late TasksProvider tasksProvider;
   @override
   Widget build(BuildContext context) {
     userProvider = Provider.of<AuthUserProvider>(context);
+    tasksProvider = Provider.of<TasksProvider>(context);
 
     var provider = Provider.of<AppConfigProvider>(context);
 
@@ -107,7 +111,7 @@ class _ProfileTabState extends State<ProfileTab> {
             // -----------------------App Info-----------------------------
             Divider(
               thickness: 1,
-              color: AppColors.lightBeigeColor,
+              color: AppColors.darkBeigeColor,
             ),
 
             SizedBox(height: 12,),
@@ -129,7 +133,46 @@ class _ProfileTabState extends State<ProfileTab> {
               thickness: 1,
               color: AppColors.darkBeigeColor,
             ),
-            
+
+            AppInfoItem(
+                title: AppLocalizations.of(context)!.all_tasks,
+                value: tasksProvider.allTasksCount(userProvider.currentUser!.id!).toString(),
+                icon: Icons.list_alt),
+            Divider(
+              thickness: 1,
+              color: AppColors.lightBeigeColor,
+            ),
+            SizedBox(height: 12,),
+            AppInfoItem(
+                title: AppLocalizations.of(context)!.pending_tasks,
+                value: tasksProvider.pendingTasksCount(userProvider.currentUser!.id!).toString(),
+                icon: Icons.schedule),
+            Divider(
+              thickness: 1,
+              color: AppColors.lightBeigeColor,
+            ),
+            SizedBox(height: 12,),
+            AppInfoItem(
+                title: AppLocalizations.of(context)!.completed_tasks,
+                value: tasksProvider.completedTasksCount(userProvider.currentUser!.id!).toString(),
+                icon: Icons.done_all),
+            Divider(
+              thickness: 1,
+              color: AppColors.darkBeigeColor,
+            ),
+            SizedBox(height: 12,),
+            InkWell(
+              onTap: (){
+                tasksProvider.allUserTasks = [];
+                userProvider.currentUser = null;
+                tasksProvider.tasks = [];
+                Navigator.of(context).pushReplacementNamed(LoginScreen.routeName);
+              },
+              child: AppInfoItem(
+                  title: AppLocalizations.of(context)!.log_out,
+                  icon: Icons.logout_outlined),
+            ),
+
 
 
 
