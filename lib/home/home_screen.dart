@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:tick_done_app/new_task/add_new_task_screen.dart';
 import 'package:tick_done_app/profile/profile_tab.dart';
+import 'package:tick_done_app/providers/auth_user_provider.dart';
 import 'package:tick_done_app/tasks/tasks_tab.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -17,7 +19,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       appBar: AppBar(
         title: Text("TickDone" ,

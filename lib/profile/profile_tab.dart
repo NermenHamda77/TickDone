@@ -7,6 +7,7 @@ import 'package:tick_done_app/theming/app_colors.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../providers/app_config_provider.dart';
+import '../providers/auth_user_provider.dart';
 
 class ProfileTab extends StatefulWidget {
 
@@ -15,8 +16,12 @@ class ProfileTab extends StatefulWidget {
 }
 
 class _ProfileTabState extends State<ProfileTab> {
+  late AuthUserProvider userProvider;
+
   @override
   Widget build(BuildContext context) {
+    userProvider = Provider.of<AuthUserProvider>(context);
+
     var provider = Provider.of<AppConfigProvider>(context);
 
     return Padding(
@@ -33,7 +38,7 @@ class _ProfileTabState extends State<ProfileTab> {
             ),
             SizedBox(height: 16,),
 
-            Text("Ner Meen ",
+            Text(userProvider.currentUser!.name!,
               style: Theme
                   .of(context)
                   .textTheme
@@ -41,7 +46,7 @@ class _ProfileTabState extends State<ProfileTab> {
             ),
             SizedBox(height: 10,),
 
-            Text("nermeen@gmail.com",
+            Text(userProvider.currentUser!.email!,
               style: Theme
                   .of(context)
                   .textTheme
@@ -50,6 +55,7 @@ class _ProfileTabState extends State<ProfileTab> {
                   color: AppColors.darkBeigeColor
               ),),
             SizedBox(height: 16,),
+            // -----------------------Settings-----------------------------
 
             Divider(
               thickness: 1,
@@ -97,10 +103,33 @@ class _ProfileTabState extends State<ProfileTab> {
               icon: Icons.brightness_6,
               onTap: showModeBottomSheet,
             ),
+
+            // -----------------------App Info-----------------------------
             Divider(
               thickness: 1,
               color: AppColors.lightBeigeColor,
             ),
+
+            SizedBox(height: 12,),
+            Align(
+              alignment: AlignmentDirectional.centerStart,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                child: Text("App Info",
+                    style: Theme
+                        .of(context)
+                        .textTheme
+                        .bodyMedium,
+                    textAlign: TextAlign.start),
+              ),
+            ),
+            SizedBox(height: 10,),
+
+            Divider(
+              thickness: 1,
+              color: AppColors.darkBeigeColor,
+            ),
+            
 
 
 

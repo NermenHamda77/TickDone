@@ -7,6 +7,8 @@ import 'package:tick_done_app/model/task_model.dart';
 import 'package:tick_done_app/theming/app_colors.dart';
 
 import '../providers/app_config_provider.dart';
+import '../providers/auth_user_provider.dart';
+import '../providers/tasks_provider.dart';
 
 class EditTaskScreen extends StatefulWidget {
   static const String routeName = "edit_task_screen";
@@ -20,6 +22,8 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
   final formKey = GlobalKey<FormState>();
 
   late AppConfigProvider provider;
+  late AuthUserProvider userProvider;
+  late TasksProvider tasksProvider;
   TextEditingController titleController = TextEditingController();
   TextEditingController descController = TextEditingController();
   Task? task;
@@ -38,6 +42,8 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
   @override
   Widget build(BuildContext context) {
     provider = Provider.of<AppConfigProvider>(context);
+    userProvider = Provider.of<AuthUserProvider>(context);
+    tasksProvider = Provider.of<TasksProvider>(context);
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
@@ -251,10 +257,17 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
           title: titleController.text,
           description: descController.text,
           dateTime: selectedDate);
-      FirebaseUtils.updateTaskInFireStore(updatedTask).timeout(Duration(seconds: 1),
+
+      FirebaseUtils.updateTaskInFireStore(updatedTask , userProvider.currentUser!.id!)
+          .then((value) {
+        print("Task edited successfully");
+        tasksProvider.getAllTasksFromFireStore(userProvider.currentUser!.id!);
+        Navigator.pop(context);
+      })
+          .timeout(Duration(seconds: 1),
           onTimeout: () {
         print("Task edited successfully");
-        provider.getAllTasksFromFireStore();
+        tasksProvider.getAllTasksFromFireStore(userProvider.currentUser!.id!);
         Navigator.pop(context);
       });
     }
