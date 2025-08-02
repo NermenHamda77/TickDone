@@ -37,5 +37,10 @@
 "confirm_password" : "Confirm Password",
 "already_have_an_account" : "Already have an Account?",
 "dont_have_an_account" : "Don't have an Account?",
-"log_out" : "Log Out"
+"log_out" : "Log Out",
+"password_rule_uppercase": "At least 1 uppercase letter",
+"password_rule_lowercase": "At least 1 lowercase letter",
+"password_rule_number": "At least 1 number",
+"password_rule_special": "At least 1 special character (!, @, #, $, &, *, ~)",
+"password_rule_min_length": "Minimum 8 characters"
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class PasswordRulesWidget extends StatefulWidget {
   final String password;
@@ -18,14 +19,14 @@ class _PasswordRulesWidgetState extends State<PasswordRulesWidget> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         buildPasswordRule(
-            "At least 8 characters", getColor(hasMinLength(widget.password))),
-        buildPasswordRule("At least 1 uppercase letter",
+            AppLocalizations.of(context)!.password_rule_min_length, getColor(hasMinLength(widget.password))),
+        buildPasswordRule(AppLocalizations.of(context)!.password_rule_uppercase,
             getColor(hasUpperCase(widget.password))),
-        buildPasswordRule("At least 1 lowercase letter",
+        buildPasswordRule(AppLocalizations.of(context)!.password_rule_lowercase,
             getColor(hasLowerCase(widget.password))),
         buildPasswordRule(
-            "At least 1 number", getColor(hasDigit(widget.password))),
-        buildPasswordRule("At least 1 special character (! @ # \$ & * ~)",
+            AppLocalizations.of(context)!.password_rule_number, getColor(hasDigit(widget.password))),
+        buildPasswordRule(AppLocalizations.of(context)!.password_rule_special,
             getColor(hasSpecialChar(widget.password))),
       ],
     );
