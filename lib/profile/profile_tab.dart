@@ -34,29 +34,39 @@ class _ProfileTabState extends State<ProfileTab> {
       child: SingleChildScrollView(
         child: Column(
           children: [
-            Center(
-              child: CircleAvatar(
-                radius: 40,
-                backgroundImage: AssetImage("assets/images/avatar.png"),
+            Row(children: [
+              CircleAvatar(
+                radius: 30,
+                backgroundColor: AppColors.beigeColor,
+                child: Text(
+                  getInitials(userProvider.currentUser!.name!),
+                  style: Theme.of(context).textTheme.bodyMedium,
+                ),
               ),
-            ),
-            SizedBox(
-              height: 16,
-            ),
+              SizedBox(
+                width: 20,
+              ),
+              Column(
+                children: [
+                  Text(userProvider.currentUser!.name!,
+                      style: Theme.of(context).textTheme.labelLarge),
+                  SizedBox(
+                    height: 10,
+                  ),
 
-            Text(userProvider.currentUser!.name!,
-                style: Theme.of(context).textTheme.labelLarge),
-            SizedBox(
-              height: 10,
-            ),
+                  Text(
+                    userProvider.currentUser!.email!,
+                    style: Theme.of(context)
+                        .textTheme
+                        .titleMedium
+                        ?.copyWith(color: AppColors.darkBeigeColor),
+                  ),
+                ],
+              )
+            ],),
 
-            Text(
-              userProvider.currentUser!.email!,
-              style: Theme.of(context)
-                  .textTheme
-                  .titleMedium
-                  ?.copyWith(color: AppColors.darkBeigeColor),
-            ),
+
+
             SizedBox(
               height: 16,
             ),
@@ -229,5 +239,16 @@ class _ProfileTabState extends State<ProfileTab> {
           borderRadius: BorderRadius.vertical(top: Radius.circular(16))),
       builder: (context) => ModeBottomSheetModel(),
     );
+  }
+
+  String getInitials(String userName){
+    List<String> names = userName.trim().split(" ");
+    if(names.isEmpty || names[0].isEmpty){
+      return "?";
+    }
+    if(names.length == 1){
+      return names[0][0].toUpperCase();
+    }
+    return names[0][0].toUpperCase() + names[1][0].toUpperCase();
   }
 }
