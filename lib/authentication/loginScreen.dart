@@ -152,7 +152,7 @@ class _LoginScreenState extends State<LoginScreen> {
         DialogUtils.hideLoading(context: context);
         DialogUtils.showMessage(
           context: context,
-          message: "Welcome Back!",
+          message: "${AppLocalizations.of(context)!.welcome_back}, ${userProvider.currentUser!.name!}!",
           icon: Icon(
             Icons.check_circle_outline,
             color: Colors.greenAccent,

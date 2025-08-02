@@ -184,7 +184,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
         MyUser myUser = MyUser(
             id: credential.user?.uid ?? "",
             name: nameController.text,
-            email: emailController.text
+            email: emailController.text,
+            joinedAt: DateTime.now()
         );
         await FirebaseUtils.addUserToFireStore(myUser);
 

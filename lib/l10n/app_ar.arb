@@ -42,5 +42,10 @@
 "password_rule_lowercase": "على الأقل حرف صغير واحد (a-z)",
 "password_rule_number": "على الأقل رقم واحد (0-9)",
 "password_rule_special": "على الأقل رمز خاص واحد (!, @, #, $, &, *, ~)",
-"password_rule_min_length": "8 أحرف على الأقل"
+"password_rule_min_length": "8 أحرف على الأقل",
+"joined_on": "تاريخ الانضمام",
+"app_info": "معلومات التطبيق",
+"user_info": "معلومات المستخدم",
+"welcome_back": "مرحبا بعودتك",
+"total_tasks": "إجمالي المهام"
 }
