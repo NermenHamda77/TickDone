@@ -20,7 +20,7 @@
 "description" : "Description",
 "date" : "Date",
 "home" : "Home",
-"save" : "Save",
+"save_changes" : "Save Changes",
 "appearance" : "Appearance",
 "profile" : "Profile",
 "select_language" : "Select Language",
@@ -45,7 +45,7 @@
 "password_rule_min_length": "At least 8 characters",
 "joined_on": "Joined on",
 "app_info": "App Information",
-"user_info": "User Information",
 "welcome_back": "Welcome back",
-"total_tasks": "Total Tasks"
+"total_tasks": "Total Tasks",
+"change_password" : "Change Password"
 }

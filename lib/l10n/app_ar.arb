@@ -20,7 +20,7 @@
 "description": "الوصف",
 "date": "التاريخ",
 "home" : "الرئيسية",
-"save" : "حفظ",
+"save_changes" : "حفظ التغييرات",
 "appearance" : "المظهر",
 "profile" : "الملف الشخصي",
 "select_language" : "اختر اللغة",
@@ -45,7 +45,7 @@
 "password_rule_min_length": "8 أحرف على الأقل",
 "joined_on": "تاريخ الانضمام",
 "app_info": "معلومات التطبيق",
-"user_info": "معلومات المستخدم",
 "welcome_back": "مرحبا بعودتك",
-"total_tasks": "إجمالي المهام"
+"total_tasks": "إجمالي المهام",
+"change_password" : "تغيير كلمة المرور"
 }

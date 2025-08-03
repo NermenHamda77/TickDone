@@ -49,6 +49,4 @@ class FirebaseUtils{
     return querySnapshot.data();
 
   }
-
-
 }

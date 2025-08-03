@@ -8,6 +8,7 @@ import 'package:tick_done_app/authentication/signUpScreen.dart';
 import 'package:tick_done_app/edit_task/edit_task_screen.dart';
 import 'package:tick_done_app/home/home_screen.dart';
 import 'package:tick_done_app/new_task/add_new_task_screen.dart';
+import 'package:tick_done_app/profile/change_password_screen.dart';
 import 'package:tick_done_app/providers/app_config_provider.dart';
 import 'package:tick_done_app/providers/auth_user_provider.dart';
 import 'package:tick_done_app/providers/tasks_provider.dart';
@@ -55,6 +56,8 @@ class MyApp extends StatelessWidget {
         EditTaskScreen.routeName: (context) => EditTaskScreen(),
         SignUpScreen.routeName: (context) => SignUpScreen(),
         LoginScreen.routeName: (context) => LoginScreen(),
+        ChangePasswordScreen.routeName: (context) => ChangePasswordScreen(),
+
       },
       themeMode: provider.appMode,
       darkTheme: MyTheme.darkTheme,

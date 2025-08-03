@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:tick_done_app/authentication/loginScreen.dart';
+import 'package:tick_done_app/profile/change_password_screen.dart';
 import 'package:tick_done_app/profile/widget/app_info_item.dart';
 import 'package:tick_done_app/profile/widget/language_bottom_sheet.dart';
 import 'package:tick_done_app/profile/widget/mode_bottom_sheet.dart';
@@ -37,10 +38,12 @@ class _ProfileTabState extends State<ProfileTab> {
             Row(children: [
               CircleAvatar(
                 radius: 30,
-                backgroundColor: AppColors.beigeColor,
+                backgroundColor: Theme.of(context).primaryColor,
                 child: Text(
                   getInitials(userProvider.currentUser!.name!),
-                  style: Theme.of(context).textTheme.bodyMedium,
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                    color: AppColors.lightBeigeColor
+                  ),
                 ),
               ),
               SizedBox(
@@ -70,6 +73,8 @@ class _ProfileTabState extends State<ProfileTab> {
             SizedBox(
               height: 16,
             ),
+
+
             // -----------------------Settings-----------------------------
 
             Divider(
@@ -122,6 +127,19 @@ class _ProfileTabState extends State<ProfileTab> {
               icon: Icons.brightness_6,
               onTap: showModeBottomSheet,
             ),
+
+
+            InkWell(
+              onTap: (){
+                Navigator.of(context).pushNamed(ChangePasswordScreen.routeName ,
+                    arguments: userProvider.currentUser);
+              },
+              child: AppInfoItem(
+                  title: AppLocalizations.of(context)!.change_password,
+                  value: "",
+                  icon: Icons.lock),
+            ),
+
 
             // -----------------------App Info-----------------------------
             Divider(
