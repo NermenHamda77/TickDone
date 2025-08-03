@@ -8,8 +8,9 @@ class TasksProvider extends ChangeNotifier{
   List<Task> tasks = [];
   DateTime selectedDate = DateTime.now();
   List<Task> allUserTasks = [];
-
+  String chosenFilter = "all";
   void getAllTasksFromFireStore(String uId) async{
+    chosenFilter = "all";
     QuerySnapshot<Task> snapshot = await FirebaseUtils.getTasksCollections(uId).get();
     //List<QueryDocumentSnapshot<Task>>   =>   List<Task>
     List<Task> tasksList = snapshot.docs.map((doc){
@@ -38,6 +39,7 @@ class TasksProvider extends ChangeNotifier{
   }
 
   void filterCompletedTasks(String uId) async{
+    chosenFilter = "completed";
     QuerySnapshot<Task>  snapshot = await FirebaseUtils.getTasksCollections(uId).get();
     List<Task> tasksList = snapshot.docs.map((doc){
       return doc.data();
@@ -60,6 +62,7 @@ class TasksProvider extends ChangeNotifier{
 
   }
   void filterPendingTasks(String uId) async{
+    chosenFilter = "pending";
     QuerySnapshot<Task>  snapshot = await FirebaseUtils.getTasksCollections(uId).get();
     List<Task> tasksList = snapshot.docs.map((doc){
       return doc.data();
@@ -103,4 +106,21 @@ class TasksProvider extends ChangeNotifier{
   int allTasksCount(String uId){
     return allUserTasks.length;
   }
+
+  void refreshTasksAfterFilter(String uId) {
+    switch (chosenFilter) {
+      case 'completed':
+         filterCompletedTasks(uId);
+        break;
+      case 'pending':
+         filterPendingTasks(uId);
+        break;
+      case 'all':
+      default:
+         getAllTasksFromFireStore(uId);
+        break;
+    }
+  }
+
+
 }

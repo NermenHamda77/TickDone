@@ -1,11 +1,13 @@
 import 'package:easy_date_timeline/easy_date_timeline.dart';
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import 'package:tick_done_app/providers/app_config_provider.dart';
 import 'package:tick_done_app/tasks/task_item.dart';
 import 'package:tick_done_app/theming/app_colors.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+import '../model/task_model.dart';
 import '../providers/auth_user_provider.dart';
 import '../providers/tasks_provider.dart';
 
@@ -21,6 +23,7 @@ class _TasksTabState extends State<TasksTab> {
  String chosenOption = '';
  late AuthUserProvider userProvider;
  late TasksProvider tasksProvider;
+ List<Task> listOfTasks = [];
   @override
   Widget build(BuildContext context) {
     provider = Provider.of<AppConfigProvider>(context);
@@ -28,7 +31,7 @@ class _TasksTabState extends State<TasksTab> {
     tasksProvider = Provider.of<TasksProvider>(context);
 
     if(tasksProvider.tasks.isEmpty){
-      tasksProvider.getAllTasksFromFireStore(userProvider.currentUser!.id!);
+      tasksProvider.refreshTasksAfterFilter(userProvider.currentUser!.id!);
     }
     return Column(
       children: [
@@ -111,7 +114,11 @@ class _TasksTabState extends State<TasksTab> {
 
 
         Expanded(
-          child: ListView.builder(
+          child: tasksProvider.tasks.isEmpty ?
+              Center(
+                child: Lottie.asset("assets/animations/empty_state.json",),
+              ):
+          ListView.builder(
               itemBuilder: (context , index){
                return TaskItem(task: tasksProvider.tasks[index]);
               },
@@ -140,7 +147,8 @@ class _TasksTabState extends State<TasksTab> {
                 onPressed: (){
                   // show all tasks
                   setState(() {
-                    tasksProvider.getAllTasksFromFireStore(userProvider.currentUser!.id!);
+                    tasksProvider.chosenFilter = "all";
+                    tasksProvider.refreshTasksAfterFilter(userProvider.currentUser!.id!);
                     chosenOption = AppLocalizations.of(context)!.all_tasks;
                     Navigator.pop(context);
                   });
@@ -155,6 +163,7 @@ class _TasksTabState extends State<TasksTab> {
                 onPressed: (){
                   // show pending tasks
                   setState(() {
+                    tasksProvider.chosenFilter = "pending";
                     tasksProvider.filterPendingTasks(userProvider.currentUser!.id!);
                     chosenOption = AppLocalizations.of(context)!.pending_tasks;
                     Navigator.pop(context);
@@ -170,6 +179,7 @@ class _TasksTabState extends State<TasksTab> {
                 onPressed: (){
                   // show completed tasks
                   setState(() {
+                    tasksProvider.chosenFilter = "completed";
                     tasksProvider.filterCompletedTasks(userProvider.currentUser!.id!);
                     chosenOption = AppLocalizations.of(context)!.completed_tasks;
                     Navigator.pop(context);
