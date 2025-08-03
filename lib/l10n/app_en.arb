@@ -20,7 +20,7 @@
 "description" : "Description",
 "date" : "Date",
 "home" : "Home",
-"save" : "Save",
+"save_changes" : "Save Changes",
 "appearance" : "Appearance",
 "profile" : "Profile",
 "select_language" : "Select Language",
@@ -36,5 +36,16 @@
 "password" : "Password",
 "confirm_password" : "Confirm Password",
 "already_have_an_account" : "Already have an Account?",
-"dont_have_an_account" : "Don't have an Account?"
+"dont_have_an_account" : "Don't have an Account?",
+"log_out" : "Log Out",
+"password_rule_uppercase": "At least 1 uppercase letter",
+"password_rule_lowercase": "At least 1 lowercase letter",
+"password_rule_number": "At least 1 number",
+"password_rule_special": "At least 1 special character (!, @, #, $, &, *, ~)",
+"password_rule_min_length": "At least 8 characters",
+"joined_on": "Joined on",
+"app_info": "App Information",
+"welcome_back": "Welcome back",
+"total_tasks": "Total Tasks",
+"change_password" : "Change Password"
 }

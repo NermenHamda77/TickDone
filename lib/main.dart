@@ -3,10 +3,12 @@ import 'dart:io';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tick_done_app/authentication/signUpScreen.dart';
 import 'package:tick_done_app/edit_task/edit_task_screen.dart';
 import 'package:tick_done_app/home/home_screen.dart';
 import 'package:tick_done_app/new_task/add_new_task_screen.dart';
+import 'package:tick_done_app/profile/change_password_screen.dart';
 import 'package:tick_done_app/providers/app_config_provider.dart';
 import 'package:tick_done_app/providers/auth_user_provider.dart';
 import 'package:tick_done_app/providers/tasks_provider.dart';
@@ -45,6 +47,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var provider = Provider.of<AppConfigProvider>(context);
+    loadSharedPrefsData(provider);
     return MaterialApp(
       theme: MyTheme.lightTheme,
       routes: {
@@ -53,6 +56,8 @@ class MyApp extends StatelessWidget {
         EditTaskScreen.routeName: (context) => EditTaskScreen(),
         SignUpScreen.routeName: (context) => SignUpScreen(),
         LoginScreen.routeName: (context) => LoginScreen(),
+        ChangePasswordScreen.routeName: (context) => ChangePasswordScreen(),
+
       },
       themeMode: provider.appMode,
       darkTheme: MyTheme.darkTheme,
@@ -63,4 +68,23 @@ class MyApp extends StatelessWidget {
       supportedLocales: AppLocalizations.supportedLocales,
     );
   }
+
+  void loadSharedPrefsData(AppConfigProvider provider) async{
+
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    var mode = sharedPreferences.get("isDarkMode");
+    if(mode == true){
+      provider.changeAppMode(ThemeMode.dark);
+    }else if(mode == false){
+      provider.changeAppMode(ThemeMode.light);
+    }
+
+    var language = sharedPreferences.get("isEnglishLanguage");
+    if(language == true){
+      provider.changeAppLanguage("en");
+    }else if(language == false){
+      provider.changeAppLanguage("ar");
+    }
+  }
+
 }

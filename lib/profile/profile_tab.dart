@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:tick_done_app/authentication/loginScreen.dart';
+import 'package:tick_done_app/profile/change_password_screen.dart';
+import 'package:tick_done_app/profile/widget/app_info_item.dart';
 import 'package:tick_done_app/profile/widget/language_bottom_sheet.dart';
 import 'package:tick_done_app/profile/widget/mode_bottom_sheet.dart';
 import 'package:tick_done_app/profile/widget/settings_item.dart';
+import 'package:tick_done_app/providers/tasks_provider.dart';
 import 'package:tick_done_app/theming/app_colors.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -10,17 +15,18 @@ import '../providers/app_config_provider.dart';
 import '../providers/auth_user_provider.dart';
 
 class ProfileTab extends StatefulWidget {
-
   @override
   State<ProfileTab> createState() => _ProfileTabState();
 }
 
 class _ProfileTabState extends State<ProfileTab> {
   late AuthUserProvider userProvider;
+  late TasksProvider tasksProvider;
 
   @override
   Widget build(BuildContext context) {
     userProvider = Provider.of<AuthUserProvider>(context);
+    tasksProvider = Provider.of<TasksProvider>(context);
 
     var provider = Provider.of<AppConfigProvider>(context);
 
@@ -29,52 +35,67 @@ class _ProfileTabState extends State<ProfileTab> {
       child: SingleChildScrollView(
         child: Column(
           children: [
-            Center(
-              child: CircleAvatar(
-
-                radius: 40,
-                backgroundImage: AssetImage("assets/images/avatar.png"),
+            Row(children: [
+              CircleAvatar(
+                radius: 30,
+                backgroundColor: Theme.of(context).primaryColor,
+                child: Text(
+                  getInitials(userProvider.currentUser!.name!),
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                    color: AppColors.lightBeigeColor
+                  ),
+                ),
               ),
-            ),
-            SizedBox(height: 16,),
+              SizedBox(
+                width: 20,
+              ),
+              Column(
+                children: [
+                  Text(userProvider.currentUser!.name!,
+                      style: Theme.of(context).textTheme.labelLarge),
+                  SizedBox(
+                    height: 10,
+                  ),
 
-            Text(userProvider.currentUser!.name!,
-              style: Theme
-                  .of(context)
-                  .textTheme
-                  .labelLarge
-            ),
-            SizedBox(height: 10,),
+                  Text(
+                    userProvider.currentUser!.email!,
+                    style: Theme.of(context)
+                        .textTheme
+                        .titleMedium
+                        ?.copyWith(color: AppColors.darkBeigeColor),
+                  ),
+                ],
+              )
+            ],),
 
-            Text(userProvider.currentUser!.email!,
-              style: Theme
-                  .of(context)
-                  .textTheme
-                  .titleMedium
-                  ?.copyWith(
-                  color: AppColors.darkBeigeColor
-              ),),
-            SizedBox(height: 16,),
+
+
+            SizedBox(
+              height: 16,
+            ),
+
+
             // -----------------------Settings-----------------------------
 
             Divider(
               thickness: 1,
               color: AppColors.darkBeigeColor,
             ),
-            SizedBox(height: 12,),
+            SizedBox(
+              height: 12,
+            ),
             Align(
               alignment: AlignmentDirectional.centerStart,
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 8.0),
                 child: Text(AppLocalizations.of(context)!.settings,
-                    style: Theme
-                        .of(context)
-                        .textTheme
-                        .bodyMedium,
+                    style: Theme.of(context).textTheme.bodyMedium,
                     textAlign: TextAlign.start),
               ),
             ),
-            SizedBox(height: 10,),
+            SizedBox(
+              height: 10,
+            ),
 
             Divider(
               thickness: 1,
@@ -82,57 +103,138 @@ class _ProfileTabState extends State<ProfileTab> {
             ),
             SettingsItemRow(
               title: AppLocalizations.of(context)!.language,
-              value:
-              provider.isEnglishLanguage() ?
-              AppLocalizations.of(context)!.english :
-              AppLocalizations.of(context)!.arabic,
+              value: provider.isEnglishLanguage()
+                  ? AppLocalizations.of(context)!.english
+                  : AppLocalizations.of(context)!.arabic,
               icon: Icons.language,
               onTap: showLanguageBottomSheet,
             ),
+/*
             Divider(
               thickness: 1,
               color: AppColors.lightBeigeColor,
             ),
-            SizedBox(height: 12,),
+            SizedBox(
+              height: 12,
+            ),
+*/
 
             SettingsItemRow(
               title: AppLocalizations.of(context)!.mode,
-              value: provider.isDarkMode() ?
-              AppLocalizations.of(context)!.dark :
-              AppLocalizations.of(context)!.light,
+              value: provider.isDarkMode()
+                  ? AppLocalizations.of(context)!.dark
+                  : AppLocalizations.of(context)!.light,
               icon: Icons.brightness_6,
               onTap: showModeBottomSheet,
             ),
 
+
+            InkWell(
+              onTap: (){
+                Navigator.of(context).pushNamed(ChangePasswordScreen.routeName ,
+                    arguments: userProvider.currentUser);
+              },
+              child: AppInfoItem(
+                  title: AppLocalizations.of(context)!.change_password,
+                  value: "",
+                  icon: Icons.lock),
+            ),
+
+
             // -----------------------App Info-----------------------------
             Divider(
               thickness: 1,
-              color: AppColors.lightBeigeColor,
+              color: AppColors.darkBeigeColor,
             ),
 
-            SizedBox(height: 12,),
+            SizedBox(
+              height: 12,
+            ),
             Align(
               alignment: AlignmentDirectional.centerStart,
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                child: Text("App Info",
-                    style: Theme
-                        .of(context)
-                        .textTheme
-                        .bodyMedium,
+                child: Text(AppLocalizations.of(context)!.app_info,
+                    style: Theme.of(context).textTheme.bodyMedium,
                     textAlign: TextAlign.start),
               ),
             ),
-            SizedBox(height: 10,),
+            SizedBox(
+              height: 10,
+            ),
 
             Divider(
               thickness: 1,
               color: AppColors.darkBeigeColor,
             ),
-            
+
+            AppInfoItem(
+                title: AppLocalizations.of(context)!.total_tasks,
+                value: tasksProvider
+                    .allTasksCount(userProvider.currentUser!.id!)
+                    .toString(),
+                icon: Icons.list_alt),
+/*            Divider(
+              thickness: 1,
+              color: AppColors.lightBeigeColor,
+            ),
+            SizedBox(
+              height: 12,
+            ),*/
+            AppInfoItem(
+                title: AppLocalizations.of(context)!.pending_tasks,
+                value: tasksProvider
+                    .pendingTasksCount(userProvider.currentUser!.id!)
+                    .toString(),
+                icon: Icons.schedule),
+/*            Divider(
+              thickness: 1,
+              color: AppColors.lightBeigeColor,
+            ),
+            SizedBox(
+              height: 12,
+            ),*/
+            AppInfoItem(
+                title: AppLocalizations.of(context)!.completed_tasks,
+                value: tasksProvider
+                    .completedTasksCount(userProvider.currentUser!.id!)
+                    .toString(),
+                icon: Icons.done_all),
 
 
+/*            Divider(
+              thickness: 1,
+              color: AppColors.lightBeigeColor,
+            ),
+            SizedBox(
+              height: 12,
+            ),*/
+            AppInfoItem(
+                title: AppLocalizations.of(context)!.joined_on,
+                value: provider.isEnglishLanguage() ?
+                DateFormat.yMMMMd("en").format(userProvider.currentUser!.joinedAt) :
+                DateFormat.yMMMMd("ar").format(userProvider.currentUser!.joinedAt) ,
+                icon: Icons.event),
 
+            Divider(
+              thickness: 1,
+              color: AppColors.darkBeigeColor,
+            ),
+            SizedBox(
+              height: 12,
+            ),
+            InkWell(
+              onTap: () {
+                tasksProvider.allUserTasks = [];
+                userProvider.currentUser = null;
+                tasksProvider.tasks = [];
+                Navigator.of(context)
+                    .pushReplacementNamed(LoginScreen.routeName);
+              },
+              child: AppInfoItem(
+                  title: AppLocalizations.of(context)!.log_out,
+                  icon: Icons.logout_outlined),
+            ),
           ],
         ),
       ),
@@ -141,25 +243,30 @@ class _ProfileTabState extends State<ProfileTab> {
 
   void showLanguageBottomSheet() {
     showModalBottomSheet(
-        context: context,
-
-        shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.vertical(top: Radius.circular(16))
-        ),
-        builder: (context) =>  LanguageBottomSheetModel(),
-
+      context: context,
+      shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(top: Radius.circular(16))),
+      builder: (context) => LanguageBottomSheetModel(),
     );
   }
 
   void showModeBottomSheet() {
     showModalBottomSheet(
       context: context,
-
       shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.vertical(top: Radius.circular(16))
-      ),
-      builder: (context) =>  ModeBottomSheetModel(),
-
+          borderRadius: BorderRadius.vertical(top: Radius.circular(16))),
+      builder: (context) => ModeBottomSheetModel(),
     );
+  }
+
+  String getInitials(String userName){
+    List<String> names = userName.trim().split(" ");
+    if(names.isEmpty || names[0].isEmpty){
+      return "?";
+    }
+    if(names.length == 1){
+      return names[0][0].toUpperCase();
+    }
+    return names[0][0].toUpperCase() + names[1][0].toUpperCase();
   }
 }

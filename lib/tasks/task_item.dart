@@ -68,17 +68,19 @@ class _TaskItemState extends State<TaskItem> {
               FirebaseUtils.completeTaskInFireStore(widget.task , userProvider.currentUser!.id!)
                   .then((value){
                 setState(() {
+                  tasksProvider.getAllTasksFromFireStore(userProvider.currentUser!.id!);
+                  tasksProvider.getAllUserTasksFromFireStore(userProvider.currentUser!.id!);
 
                 });
               })
                   .timeout(
                 Duration(seconds: 1), onTimeout: (){
-                  print("Task is completed successfully");
+                tasksProvider.getAllTasksFromFireStore(userProvider.currentUser!.id!);
+                print("Task is completed successfully");
               }
               );
-              setState(() {
 
-              });
+
 
             },
             icon: widget.task.isDone == true ?
@@ -93,6 +95,8 @@ class _TaskItemState extends State<TaskItem> {
               FirebaseUtils.deleteTaskFromFireStore(widget.task , userProvider.currentUser!.id!)
                   .then((value){
                 tasksProvider.getAllTasksFromFireStore(userProvider.currentUser!.id!);
+                tasksProvider.getAllUserTasksFromFireStore(userProvider.currentUser!.id!);
+
 
               })
                   .timeout(
