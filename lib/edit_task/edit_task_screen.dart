@@ -261,13 +261,13 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
       FirebaseUtils.updateTaskInFireStore(updatedTask , userProvider.currentUser!.id!)
           .then((value) {
         print("Task edited successfully");
-        tasksProvider.getAllTasksFromFireStore(userProvider.currentUser!.id!);
+        tasksProvider.refreshTasksAfterFilter(userProvider.currentUser!.id!);
         Navigator.pop(context);
       })
           .timeout(Duration(seconds: 1),
           onTimeout: () {
         print("Task edited successfully");
-        tasksProvider.getAllTasksFromFireStore(userProvider.currentUser!.id!);
+        tasksProvider.refreshTasksAfterFilter(userProvider.currentUser!.id!);
         Navigator.pop(context);
       });
     }

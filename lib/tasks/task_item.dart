@@ -68,14 +68,14 @@ class _TaskItemState extends State<TaskItem> {
               FirebaseUtils.completeTaskInFireStore(widget.task , userProvider.currentUser!.id!)
                   .then((value){
                 setState(() {
-                  tasksProvider.getAllTasksFromFireStore(userProvider.currentUser!.id!);
+                  tasksProvider.refreshTasksAfterFilter(userProvider.currentUser!.id!);
                   tasksProvider.getAllUserTasksFromFireStore(userProvider.currentUser!.id!);
 
                 });
               })
                   .timeout(
                 Duration(seconds: 1), onTimeout: (){
-                tasksProvider.getAllTasksFromFireStore(userProvider.currentUser!.id!);
+                tasksProvider.refreshTasksAfterFilter(userProvider.currentUser!.id!);
                 print("Task is completed successfully");
               }
               );
@@ -92,24 +92,45 @@ class _TaskItemState extends State<TaskItem> {
 
           IconButton(
             onPressed: (){
-              FirebaseUtils.deleteTaskFromFireStore(widget.task , userProvider.currentUser!.id!)
-                  .then((value){
-                tasksProvider.getAllTasksFromFireStore(userProvider.currentUser!.id!);
-                tasksProvider.getAllUserTasksFromFireStore(userProvider.currentUser!.id!);
-
-
-              })
-                  .timeout(
-                  Duration(seconds: 1) , onTimeout: (){
-                    print("Task is deleted successfully");
-              });
-              tasksProvider.getAllTasksFromFireStore(userProvider.currentUser!.id!);
-
+              showConfirmDialog();
             },
-            icon: Icon(Icons.cancel_outlined, size: 28,),
+            icon: Icon(Icons.delete_outline_outlined, size: 28,),
             color: Theme.of(context).primaryColor,
           ),
 
+        ],
+      ),
+    );
+  }
+
+  void showConfirmDialog() {
+    showDialog(
+      context: context,
+      builder: (_) => AlertDialog(
+        title: Text("Confirm Delete"),
+        content: Text("Are you sure you want to delete this task?"),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: Text("Cancel"),
+          ),
+          TextButton(
+            onPressed: () {
+              // delete task
+              FirebaseUtils.deleteTaskFromFireStore(widget.task , userProvider.currentUser!.id!)
+                  .then((value){
+                tasksProvider.refreshTasksAfterFilter(userProvider.currentUser!.id!);
+                tasksProvider.getAllUserTasksFromFireStore(userProvider.currentUser!.id!);
+              })
+                  .timeout(
+                  Duration(seconds: 1) , onTimeout: (){
+                print("Task is deleted successfully");
+              });
+              Navigator.pop(context);
+              tasksProvider.refreshTasksAfterFilter(userProvider.currentUser!.id!);
+            },
+            child: Text("Delete", style: TextStyle(color: Colors.red)),
+          ),
         ],
       ),
     );
