@@ -47,6 +47,7 @@ dependencies:
   shared_preferences: ^2.2.3
   lottie: ^2.7.0
   flutter_native_splash: ^2.3.7
+  flutter_launcher_icons: ^0.13.1
 
 
 
@@ -106,17 +107,24 @@ flutter:
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
 flutter_native_splash:
+  android: true
+  ios: true
   fullscreen: true
   color: "#A98C6F"
   color_dark: "#8c7a69"
-  image: assets/images/splash_screen_light.png
-  image_dark: assets/images/splash_screen_dark.png
-
+  background_image: assets/images/tickdone_logo.png
+  background_image_dark: assets/images/tickdone_logo.png
 
   android_12:
     fullscreen: true
     color: "#A98C6F"
-    image: assets/images/splash_screen_light.png
-    image_dark: assets/images/splash_screen_dark.png
     color_dark: "#8c7a69"
+    background_image: assets/images/tickdone_logo.png
+    background_image_dark: assets/images/tickdone_logo.png
 
+
+
+flutter_launcher_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "assets/images/tickdone_logo.png"
