@@ -17,7 +17,6 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import 'authentication/loginScreen.dart';
 
-
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   Platform.isAndroid ?
@@ -40,14 +39,23 @@ void main() async {
       child: const MyApp()));
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
 
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
   // This widget is the root of your application.
+  @override
+  void initState() {
+    super.initState();
+    loadAppPreferences();
+  }
   @override
   Widget build(BuildContext context) {
     var provider = Provider.of<AppConfigProvider>(context);
-    loadSharedPrefsData(provider);
     return MaterialApp(
       theme: MyTheme.lightTheme,
       routes: {
@@ -69,8 +77,8 @@ class MyApp extends StatelessWidget {
     );
   }
 
-  void loadSharedPrefsData(AppConfigProvider provider) async{
-
+  void loadAppPreferences() async{
+    final provider = Provider.of<AppConfigProvider>(context , listen: false);
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     var mode = sharedPreferences.get("isDarkMode");
     if(mode == true){
@@ -85,6 +93,6 @@ class MyApp extends StatelessWidget {
     }else if(language == false){
       provider.changeAppLanguage("ar");
     }
-  }
 
+  }
 }

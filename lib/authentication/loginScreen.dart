@@ -9,6 +9,7 @@ import 'package:tick_done_app/providers/tasks_provider.dart';
 
 import '../dialog_utils/dialog_utils.dart';
 import '../home/home_screen.dart';
+import '../providers/app_config_provider.dart';
 import '../providers/auth_user_provider.dart';
 import '../theming/app_colors.dart';
 
@@ -133,8 +134,8 @@ class _LoginScreenState extends State<LoginScreen> {
   void login() async {
     if (formKey.currentState?.validate() == true) {
       // login and go to home
-      DialogUtils.showLoading(context: context, message: "Loading...");
-      try {
+      var provider = Provider.of<AppConfigProvider>(context , listen: false);
+      DialogUtils.showLoading(context: context, message: "Loading..." , provider:provider );      try {
         final credential = await FirebaseAuth.instance
             .signInWithEmailAndPassword(
                 email: emailController.text, password: passwordController.text);

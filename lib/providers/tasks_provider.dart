@@ -35,7 +35,7 @@ class TasksProvider extends ChangeNotifier{
 
   void changeDateTime(DateTime newSelectedDate , String uId){
     selectedDate = newSelectedDate;
-    getAllTasksFromFireStore(uId);
+    refreshTasksAfterFilter(uId);
   }
 
   void filterCompletedTasks(String uId) async{
@@ -121,6 +121,17 @@ class TasksProvider extends ChangeNotifier{
         break;
     }
   }
+
+  /*void enabledNotificationsForAllTasks(){
+    for(var task in tasks){
+      NotificationService.scheduleNotification(
+          id: task.id.hashCode,
+          title: task.title,
+          body: task.description,
+          scheduledTime: task.dateTime
+      );
+    }*/
+
 
 
 }

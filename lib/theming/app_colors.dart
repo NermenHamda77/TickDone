@@ -21,4 +21,6 @@ class AppColors{
   static const Color textButtonColor = Color(0xff8C6E54);
 
   static const Color lightBlackColor = Color(0xA0000000);
+  static const Color completedTaskColor = Color(0xff463f34);
+
 }

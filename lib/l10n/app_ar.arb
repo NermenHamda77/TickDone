@@ -47,5 +47,14 @@
 "app_info": "معلومات التطبيق",
 "welcome_back": "مرحبا بعودتك",
 "total_tasks": "إجمالي المهام",
-"change_password" : "تغيير كلمة المرور"
+"change_password" : "تغيير كلمة المرور",
+"confirm_delete_title" : "تأكيد الحذف",
+"confirm_delete_message" : "هل أنت متأكد أنك تريد حذف هذه المهمة؟",
+"task_is_deleted_successfully" : "تم حذف المهمة بنجاح",
+"delete" : "حذف",
+"tasks_completed_successfully" : "تم إكمال االمهمة بنجاح",
+"confirm_logout_title" : "تأكيد تسجيل الخروج",
+"confirm_logout_message" : "هل أنت متأكد أنك تريد تسجيل الخروج؟",
+"notifications_settings": "الإشعارات",
+"notifications_settings_desc": "استلم تذكيرًا عندما يحين وقت المهمة ومازالت غير مكتملة."
 }

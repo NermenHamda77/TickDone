@@ -7,4 +7,9 @@ class AuthUserProvider extends ChangeNotifier{
     currentUser = newUser;
     notifyListeners();
   }
+
+  void clearUser(){
+    currentUser = null;
+    notifyListeners();
+  }
 }

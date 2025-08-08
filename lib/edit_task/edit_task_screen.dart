@@ -99,7 +99,11 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
                       borderSide: BorderSide(
                           width: 2, color: AppColors.primaryLightColor)),
                 ),
-                style: Theme.of(context).textTheme.titleMedium,
+                style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                  color: provider.isDarkMode() ?
+                  AppColors.beigeColor:
+                  AppColors.secondaryTextColor,
+                ),
               ),
               SizedBox(
                 height: 30,
@@ -135,7 +139,11 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
                       borderSide: BorderSide(
                           width: 2, color: AppColors.primaryLightColor)),
                 ),
-                style: Theme.of(context).textTheme.titleMedium,
+                style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                  color: provider.isDarkMode() ?
+                  AppColors.beigeColor:
+                  AppColors.secondaryTextColor,
+                ),
                 maxLines: 5,
               ),
               SizedBox(
@@ -164,8 +172,10 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
                       Text(
                         DateFormat('EEE, dd MMM, yyyy').format(selectedDate),
                         style:
-                            Theme.of(context).textTheme.titleMedium!.copyWith(
-                                  color: AppColors.darkTextColor,
+                            Theme.of(context).textTheme.titleMedium?.copyWith(
+                              color: provider.isDarkMode() ?
+                              AppColors.beigeColor:
+                              AppColors.secondaryTextColor,
                                 ),
                       ),
                       Icon(Icons.calendar_month,
@@ -262,6 +272,12 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
           .then((value) {
         print("Task edited successfully");
         tasksProvider.refreshTasksAfterFilter(userProvider.currentUser!.id!);
+       /* NotificationService.updateNotification(
+            id: task!.id.hashCode,
+            title: titleController.text,
+            body:descController.text,
+            scheduledTime: selectedDate
+        );*/
         Navigator.pop(context);
       })
           .timeout(Duration(seconds: 1),
