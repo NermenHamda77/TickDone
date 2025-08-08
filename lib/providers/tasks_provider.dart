@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:tick_done_app/services/notification_service.dart';
 
 import '../firebase_utils/firebase_utils.dart';
 import '../model/task_model.dart';
@@ -119,6 +120,17 @@ class TasksProvider extends ChangeNotifier{
       default:
          getAllTasksFromFireStore(uId);
         break;
+    }
+  }
+
+  void enabledNotificationsForAllTasks(){
+    for(var task in tasks){
+      NotificationService.scheduleNotification(
+          id: task.id.hashCode,
+          title: task.title,
+          body: task.description,
+          scheduledTime: task.dateTime
+      );
     }
   }
 

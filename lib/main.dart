@@ -95,5 +95,12 @@ class _MyAppState extends State<MyApp> {
     }else if(language == false){
       provider.changeAppLanguage("ar");
     }
+    var notification = sharedPreferences.getBool("isNotificationsEnabled");
+    if(notification == true){
+      provider.setNotificationsEnabled(true);
+    }else if(notification == false){
+      provider.setNotificationsEnabled(false);
+    }
+
   }
 }

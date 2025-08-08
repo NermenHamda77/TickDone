@@ -41,7 +41,7 @@ class AppConfigProvider extends ChangeNotifier{
     return notificationsEnabled;
   }
 
-  setNotificationsEnabled(bool value) async{
+  Future<void> setNotificationsEnabled(bool value) async{
     notificationsEnabled = value;
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     sharedPreferences.setBool("isNotificationsEnabled", isNotificationsEnabled());

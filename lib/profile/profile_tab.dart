@@ -189,6 +189,7 @@ class _ProfileTabState extends State<ProfileTab> {
                   value: provider.isNotificationsEnabled(),
                   onChanged: (value) async {
                     await provider.setNotificationsEnabled(value);
+                    tasksProvider.enabledNotificationsForAllTasks();
 
                     if (value) {
                       await NotificationService.showNotification(
