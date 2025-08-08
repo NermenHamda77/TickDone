@@ -4,7 +4,6 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:tick_done_app/firebase_utils/firebase_utils.dart';
 import 'package:tick_done_app/model/task_model.dart';
-import 'package:tick_done_app/services/notification_service.dart';
 import 'package:tick_done_app/theming/app_colors.dart';
 
 import '../providers/app_config_provider.dart';
@@ -273,12 +272,12 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
           .then((value) {
         print("Task edited successfully");
         tasksProvider.refreshTasksAfterFilter(userProvider.currentUser!.id!);
-        NotificationService.updateNotification(
+       /* NotificationService.updateNotification(
             id: task!.id.hashCode,
             title: titleController.text,
             body:descController.text,
             scheduledTime: selectedDate
-        );
+        );*/
         Navigator.pop(context);
       })
           .timeout(Duration(seconds: 1),

@@ -19,7 +19,7 @@ class MyTheme {
     bottomNavigationBarTheme: BottomNavigationBarThemeData(
         backgroundColor: Colors.transparent,
         elevation: 0,
-        selectedItemColor: AppColors.beigeColor,
+        selectedItemColor: AppColors.darkTextColor,
         unselectedItemColor: AppColors.whiteColor,
         showUnselectedLabels: false),
 /*    textButtonTheme: TextButtonThemeData(
@@ -83,7 +83,7 @@ class MyTheme {
     bottomNavigationBarTheme: BottomNavigationBarThemeData(
         backgroundColor: Colors.transparent,
         elevation: 0,
-        selectedItemColor: AppColors.greyColor,
+        selectedItemColor: AppColors.darkTextColor,
         unselectedItemColor: AppColors.whiteColor,
         showUnselectedLabels: false),
 /*    textButtonTheme: TextButtonThemeData(

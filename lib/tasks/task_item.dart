@@ -5,7 +5,6 @@ import 'package:tick_done_app/firebase_utils/firebase_utils.dart';
 import 'package:tick_done_app/model/task_model.dart';
 import 'package:tick_done_app/providers/auth_user_provider.dart';
 import 'package:tick_done_app/providers/tasks_provider.dart';
-import 'package:tick_done_app/services/notification_service.dart';
 import 'package:tick_done_app/theming/app_colors.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -100,7 +99,6 @@ class _TaskItemState extends State<TaskItem> {
                       widget.task, userProvider.currentUser!.id!)
                   .then((value) {
                 setState(() {
-                  NotificationService.cancelNotification(widget.task.id.hashCode);
                   tasksProvider
                       .refreshTasksAfterFilter(userProvider.currentUser!.id!);
                   tasksProvider.getAllUserTasksFromFireStore(
@@ -178,7 +176,6 @@ class _TaskItemState extends State<TaskItem> {
               FirebaseUtils.deleteTaskFromFireStore(
                       widget.task, userProvider.currentUser!.id!)
                   .then((value) {
-                NotificationService.cancelNotification(widget.task.id.hashCode);
                 tasksProvider
                     .refreshTasksAfterFilter(userProvider.currentUser!.id!);
                 tasksProvider.getAllUserTasksFromFireStore(

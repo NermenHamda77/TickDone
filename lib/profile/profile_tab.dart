@@ -1,6 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:tick_done_app/authentication/loginScreen.dart';
@@ -12,10 +11,8 @@ import 'package:tick_done_app/providers/tasks_provider.dart';
 import 'package:tick_done_app/theming/app_colors.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-import '../main.dart';
 import '../providers/app_config_provider.dart';
 import '../providers/auth_user_provider.dart';
-import '../services/notification_service.dart';
 
 class ProfileTab extends StatefulWidget {
   @override
@@ -165,7 +162,7 @@ class _ProfileTabState extends State<ProfileTab> {
             ),
 
 
-
+/*
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -202,7 +199,7 @@ class _ProfileTabState extends State<ProfileTab> {
                   },
                 ),              ],
 
-            ),
+            ),*/
 
             // -----------------------App Info-----------------------------
             Divider(

@@ -5,7 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 class AppConfigProvider extends ChangeNotifier{
   String appLanguage = "en";
   ThemeMode appMode = ThemeMode.light;
-  bool notificationsEnabled = false;
+ // bool notificationsEnabled = false;
 
   void changeAppLanguage(String newLanguage) async{
     if(appLanguage == newLanguage){
@@ -37,7 +37,7 @@ class AppConfigProvider extends ChangeNotifier{
     return appLanguage == "en";
   }
 
-  bool isNotificationsEnabled(){
+/*  bool isNotificationsEnabled(){
     return notificationsEnabled;
   }
 
@@ -47,7 +47,5 @@ class AppConfigProvider extends ChangeNotifier{
     sharedPreferences.setBool("isNotificationsEnabled", isNotificationsEnabled());
     notifyListeners();
   }
-
-
-
+  */
 }

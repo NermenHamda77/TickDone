@@ -12,7 +12,6 @@ import 'package:tick_done_app/profile/change_password_screen.dart';
 import 'package:tick_done_app/providers/app_config_provider.dart';
 import 'package:tick_done_app/providers/auth_user_provider.dart';
 import 'package:tick_done_app/providers/tasks_provider.dart';
-import 'package:tick_done_app/services/notification_service.dart';
 import 'package:tick_done_app/theming/my_theme.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -30,7 +29,6 @@ void main() async {
        )
 
      ) : await Firebase.initializeApp();
-  await NotificationService.init();
   //FirebaseFirestore.instance.disableNetwork();  // offline
   runApp(MultiProvider(
       providers: [
@@ -94,12 +92,6 @@ class _MyAppState extends State<MyApp> {
       provider.changeAppLanguage("en");
     }else if(language == false){
       provider.changeAppLanguage("ar");
-    }
-    var notification = sharedPreferences.getBool("isNotificationsEnabled");
-    if(notification == true){
-      provider.setNotificationsEnabled(true);
-    }else if(notification == false){
-      provider.setNotificationsEnabled(false);
     }
 
   }

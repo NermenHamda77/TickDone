@@ -4,7 +4,6 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:tick_done_app/firebase_utils/firebase_utils.dart';
 import 'package:tick_done_app/model/task_model.dart';
-import 'package:tick_done_app/services/notification_service.dart';
 import 'package:tick_done_app/theming/app_colors.dart';
 
 import '../providers/app_config_provider.dart';
@@ -267,7 +266,7 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
         var taskProvider = Provider.of<TasksProvider>(context , listen: false);
 
         taskProvider.getAllUserTasksFromFireStore(userProvider.currentUser!.id!);
-        if(provider.isNotificationsEnabled()){
+      /*  if(provider.isNotificationsEnabled()){
          await NotificationService.scheduleNotification(
               id: task.id.hashCode,
               title: AppLocalizations.of(context)!.notifications_settings,
@@ -275,7 +274,7 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
               scheduledTime: task.dateTime
           );
 
-        }
+        }*/
         Navigator.pop(context);
       })
           .timeout(Duration(seconds: 1) ,
