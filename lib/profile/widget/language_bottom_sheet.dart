@@ -6,7 +6,8 @@ import '../../theming/app_colors.dart';
 
 class LanguageBottomSheetModel extends StatefulWidget {
   @override
-  State<LanguageBottomSheetModel> createState() => _LanguageBottomSheetModelState();
+  State<LanguageBottomSheetModel> createState() =>
+      _LanguageBottomSheetModelState();
 }
 
 class _LanguageBottomSheetModelState extends State<LanguageBottomSheetModel> {
@@ -19,15 +20,29 @@ class _LanguageBottomSheetModelState extends State<LanguageBottomSheetModel> {
         mainAxisSize: MainAxisSize.min,
         children: [
           Padding(
-            padding: const EdgeInsets.only(bottom: 8.0),
-            child: Text(
-              AppLocalizations.of(context)!.select_language,
-              style: Theme.of(context).textTheme.bodyMedium,
+            padding: const EdgeInsets.all(10),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  AppLocalizations.of(context)!.select_language,
+                  style: Theme.of(context).textTheme.bodyMedium,
+                ),
+                Spacer(),
+                InkWell(
+                  onTap: () {
+                    Navigator.pop(context);
+                  },
+                  child: Icon(
+                    Icons.cancel_outlined,
+                    color: provider.isDarkMode()
+                        ? AppColors.whiteColor
+                        : AppColors.blackColor,
+                    size: 28,
+                  ),
+                ),
+              ],
             ),
-          ),
-          Divider(
-            thickness: 1,
-            color: AppColors.lightBeigeColor,
           ),
           SizedBox(
             height: 20,
@@ -37,13 +52,11 @@ class _LanguageBottomSheetModelState extends State<LanguageBottomSheetModel> {
               // English
               provider.changeAppLanguage("en");
             },
-            child:
-            provider.isEnglishLanguage()
+            child: provider.isEnglishLanguage()
                 ? getSelectedCardWidget(
-                provider, AppLocalizations.of(context)!.english)
+                    provider, AppLocalizations.of(context)!.english)
                 : getUnselectedCardWidget(
-                provider, AppLocalizations.of(context)!.english),
-
+                    provider, AppLocalizations.of(context)!.english),
           ),
           SizedBox(
             height: 10,
@@ -53,83 +66,28 @@ class _LanguageBottomSheetModelState extends State<LanguageBottomSheetModel> {
               //light
               provider.changeAppLanguage("ar");
             },
-            child:
-            provider.isEnglishLanguage()
+            child: provider.isEnglishLanguage()
                 ? getUnselectedCardWidget(
-                provider, AppLocalizations.of(context)!.arabic)
+                    provider, AppLocalizations.of(context)!.arabic)
                 : getSelectedCardWidget(
-                provider, AppLocalizations.of(context)!.arabic),
-
+                    provider, AppLocalizations.of(context)!.arabic),
           ),
           SizedBox(
             height: 15,
-          ),
-          Padding(
-            padding: EdgeInsets.only(bottom: 12),
-            child: TextButton.icon(
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              icon: Icon(
-                Icons.cancel_outlined,
-                color: AppColors.textButtonColor,
-                size: 28,
-              ),
-              label: Text(
-                AppLocalizations.of(context)!.exit,
-                style: Theme.of(context)
-                    .textTheme
-                    .bodySmall
-                    ?.copyWith(color: AppColors.textButtonColor),
-              ),
-            ),
           ),
         ],
       ),
     );
   }
 
-  Widget getSelectedCardWidget(AppConfigProvider provider, String selectedMode) {
-    return
-      Card(
-        elevation: 3,
-        shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12)),
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Row(
-            children: [
-              Icon(
-                Icons.light_mode,
-                size: 24,
-                color: AppColors.primaryLightColor,
-              ),
-              SizedBox(width: 10,),
-              Text(
-                selectedMode,
-                style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                  color: AppColors.primaryLightColor,
-                ),
-              ),
-              Spacer(),
-              Icon(
-                Icons.check,
-                size: 30,
-                color: AppColors.primaryLightColor,
-              ),
-            ],
-          ),
-        ),
-
-      );
-  }
-
-  Widget getUnselectedCardWidget(AppConfigProvider provider, String unSelectedMode) {
+  Widget getSelectedCardWidget(
+      AppConfigProvider provider, String selectedMode) {
     return Card(
       elevation: 3,
-      shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12)),
-
+      color: provider.isDarkMode()
+          ? AppColors.primaryDarkColor
+          : AppColors.primaryLightColor,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Row(
@@ -137,13 +95,64 @@ class _LanguageBottomSheetModelState extends State<LanguageBottomSheetModel> {
             Icon(
               Icons.language,
               size: 24,
-              color: AppColors.secondaryTextColor,
+              color: provider.isDarkMode()
+                  ? AppColors.lightWhiteColor
+                  : AppColors.whiteColor,
             ),
-            SizedBox(width: 10,),
+            SizedBox(
+              width: 10,
+            ),
+            Text(
+              selectedMode,
+              style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                    color: provider.isDarkMode()
+                        ? AppColors.lightWhiteColor
+                        : AppColors.whiteColor,
+                  ),
+            ),
+            Spacer(),
+            Icon(
+              Icons.check,
+              size: 30,
+              color: provider.isDarkMode()
+                  ? AppColors.lightWhiteColor
+                  : AppColors.whiteColor,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
 
+  Widget getUnselectedCardWidget(
+      AppConfigProvider provider, String unSelectedMode) {
+    return Card(
+      elevation: 3,
+      color: provider.isDarkMode()
+          ? AppColors.lightBeigeColor
+          : AppColors.lightBeigeColor,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Row(
+          children: [
+            Icon(
+              Icons.language,
+              size: 24,
+              color: provider.isDarkMode()
+                  ? AppColors.secondaryTextColor
+                  : AppColors.secondaryTextColor,
+            ),
+            SizedBox(
+              width: 10,
+            ),
             Text(
               unSelectedMode,
-              style: Theme.of(context).textTheme.titleLarge,
+              style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                    color: provider.isDarkMode()
+                        ? AppColors.secondaryTextColor
+                        : AppColors.secondaryTextColor,
+                  ),
             ),
             Spacer(),
             Opacity(
@@ -151,7 +160,9 @@ class _LanguageBottomSheetModelState extends State<LanguageBottomSheetModel> {
               child: Icon(
                 Icons.check,
                 size: 30,
-                color: AppColors.primaryLightColor,
+                color: provider.isDarkMode()
+                    ? AppColors.secondaryTextColor
+                    : AppColors.secondaryTextColor,
               ),
             ),
           ],

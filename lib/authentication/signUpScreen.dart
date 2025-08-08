@@ -1,10 +1,12 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:provider/provider.dart';
 import 'package:tick_done_app/authentication/custom_text_form_field.dart';
 import 'package:tick_done_app/dialog_utils/dialog_utils.dart';
 import 'package:tick_done_app/firebase_utils/firebase_utils.dart';
 import 'package:tick_done_app/model/my_user.dart';
+import 'package:tick_done_app/providers/app_config_provider.dart';
 import '../theming/app_colors.dart';
 import 'build_password_rule.dart';
 import 'loginScreen.dart';
@@ -174,7 +176,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
   void register() async {
     if (formKey.currentState?.validate() == true) {
       // create account
-      DialogUtils.showLoading(context: context, message: "Loading...");
+      var provider = Provider.of<AppConfigProvider>(context , listen: false);
+      DialogUtils.showLoading(context: context, message: "Loading..." , provider:provider );
       try {
         final credential =
             await FirebaseAuth.instance.createUserWithEmailAndPassword(

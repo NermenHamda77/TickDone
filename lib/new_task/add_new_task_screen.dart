@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:tick_done_app/firebase_utils/firebase_utils.dart';
 import 'package:tick_done_app/model/task_model.dart';
+import 'package:tick_done_app/services/notification_service.dart';
 import 'package:tick_done_app/theming/app_colors.dart';
 
 import '../providers/app_config_provider.dart';
@@ -87,7 +88,11 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
                       borderSide: BorderSide(
                           width: 2, color: AppColors.primaryLightColor)),
                 ),
-                style: Theme.of(context).textTheme.titleMedium,
+                style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                  color: provider.isDarkMode() ?
+                  AppColors.beigeColor:
+                  AppColors.secondaryTextColor,
+                ),
               ),
               SizedBox(
                 height: 30,
@@ -125,7 +130,11 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
                       borderSide: BorderSide(
                           width: 2, color: AppColors.primaryLightColor)),
                 ),
-                style: Theme.of(context).textTheme.titleMedium,
+                style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                  color: provider.isDarkMode() ?
+                  AppColors.beigeColor:
+                  AppColors.secondaryTextColor,
+                ),
                 maxLines: 5,
               ),
               SizedBox(
@@ -154,7 +163,9 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
                       Text(
                         DateFormat('EEE, dd MMM, yyyy').format(selectedDate),
                         style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                          color: AppColors.darkTextColor,
+                          color: provider.isDarkMode() ?
+                          AppColors.beigeColor:
+                          AppColors.secondaryTextColor,
                         ),
                       ),
                       Icon(Icons.calendar_month, color: AppColors.primaryLightColor),
@@ -206,20 +217,6 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
 
                 ),
               ),
-            /*  ElevatedButton(
-                onPressed: () {},
-                child: Text(
-                  AppLocalizations.of(context)!.cancel,
-                  style: Theme.of(context).textTheme.titleMedium,
-                ),
-                style: ElevatedButton.styleFrom(
-                    padding: EdgeInsets.symmetric(vertical: 12, horizontal: 20),
-                      backgroundColor: AppColors.primaryLightColor,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    )
-                ),
-              ),*/
             ],
           ),
         ),
@@ -255,7 +252,7 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
     setState(() {});
   }
 
-  void addTask(){
+  void addTask() {
     if(formKey.currentState!.validate() == true){
       // add this task
       Task task = Task(
@@ -264,12 +261,21 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
           dateTime: selectedDate
       );
       FirebaseUtils.addTaskToFireStore(task , userProvider.currentUser!.id!)
-      .then((value) {
+      .then((value) async {
         print("Task added successfully");
         tasksProvider.getAllTasksFromFireStore(userProvider.currentUser!.id!);
         var taskProvider = Provider.of<TasksProvider>(context , listen: false);
 
         taskProvider.getAllUserTasksFromFireStore(userProvider.currentUser!.id!);
+        if(provider.isNotificationsEnabled()){
+         await NotificationService.scheduleNotification(
+              id: task.id.hashCode,
+              title: AppLocalizations.of(context)!.notifications_settings,
+              body: task.title,
+              scheduledTime: task.dateTime
+          );
+
+        }
         Navigator.pop(context);
       })
           .timeout(Duration(seconds: 1) ,

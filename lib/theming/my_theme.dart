@@ -19,7 +19,7 @@ class MyTheme {
     bottomNavigationBarTheme: BottomNavigationBarThemeData(
         backgroundColor: Colors.transparent,
         elevation: 0,
-        selectedItemColor: AppColors.brownColor,
+        selectedItemColor: AppColors.beigeColor,
         unselectedItemColor: AppColors.whiteColor,
         showUnselectedLabels: false),
 /*    textButtonTheme: TextButtonThemeData(
@@ -104,7 +104,7 @@ class MyTheme {
         fontSize: 24,
       ),
       bodySmall: TextStyle(
-        color: AppColors.lightWhiteColor,
+        color: AppColors.whiteColor,
         fontWeight: FontWeight.w600,
         fontSize: 18,
       ),

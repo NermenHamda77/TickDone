@@ -1,10 +1,12 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:provider/provider.dart';
 
 import '../authentication/build_password_rule.dart';
 import '../authentication/custom_text_form_field.dart';
 import '../dialog_utils/dialog_utils.dart';
+import '../providers/app_config_provider.dart';
 import '../theming/app_colors.dart';
 class ChangePasswordScreen extends StatefulWidget {
   const ChangePasswordScreen({super.key});
@@ -149,8 +151,8 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
   void saveChanges() async{
     if (formKey.currentState?.validate() == true) {
       // create account
-      DialogUtils.showLoading(context: context, message: "Loading...");
-      try {
+      var provider = Provider.of<AppConfigProvider>(context , listen: false);
+      DialogUtils.showLoading(context: context, message: "Loading..." , provider:provider );      try {
         final user = FirebaseAuth.instance.currentUser!;
         final credential =
         EmailAuthProvider.credential(

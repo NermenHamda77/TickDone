@@ -12,11 +12,11 @@ import 'package:tick_done_app/profile/change_password_screen.dart';
 import 'package:tick_done_app/providers/app_config_provider.dart';
 import 'package:tick_done_app/providers/auth_user_provider.dart';
 import 'package:tick_done_app/providers/tasks_provider.dart';
+import 'package:tick_done_app/services/notification_service.dart';
 import 'package:tick_done_app/theming/my_theme.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import 'authentication/loginScreen.dart';
-
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -30,6 +30,7 @@ void main() async {
        )
 
      ) : await Firebase.initializeApp();
+  await NotificationService.init();
   //FirebaseFirestore.instance.disableNetwork();  // offline
   runApp(MultiProvider(
       providers: [
@@ -40,14 +41,23 @@ void main() async {
       child: const MyApp()));
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
 
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
   // This widget is the root of your application.
+  @override
+  void initState() {
+    super.initState();
+    loadAppPreferences();
+  }
   @override
   Widget build(BuildContext context) {
     var provider = Provider.of<AppConfigProvider>(context);
-    loadSharedPrefsData(provider);
     return MaterialApp(
       theme: MyTheme.lightTheme,
       routes: {
@@ -69,8 +79,8 @@ class MyApp extends StatelessWidget {
     );
   }
 
-  void loadSharedPrefsData(AppConfigProvider provider) async{
-
+  void loadAppPreferences() async{
+    final provider = Provider.of<AppConfigProvider>(context , listen: false);
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     var mode = sharedPreferences.get("isDarkMode");
     if(mode == true){
@@ -86,5 +96,4 @@ class MyApp extends StatelessWidget {
       provider.changeAppLanguage("ar");
     }
   }
-
 }

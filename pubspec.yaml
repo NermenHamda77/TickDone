@@ -48,6 +48,8 @@ dependencies:
   lottie: ^2.7.0
   flutter_native_splash: ^2.3.7
   flutter_launcher_icons: ^0.13.1
+  flutter_local_notifications: ^18.0.1
+
 
 
 
@@ -110,17 +112,13 @@ flutter_native_splash:
   android: true
   ios: true
   fullscreen: true
-  color: "#A98C6F"
-  color_dark: "#8c7a69"
-  background_image: assets/images/tickdone_logo.png
-  background_image_dark: assets/images/tickdone_logo.png
+  background_image: assets/images/splash_screen_light.png
+  background_image_dark: assets/images/splash_screen_dark.png
 
   android_12:
     fullscreen: true
-    color: "#A98C6F"
-    color_dark: "#8c7a69"
-    background_image: assets/images/tickdone_logo.png
-    background_image_dark: assets/images/tickdone_logo.png
+    background_image: assets/images/splash_screen_light.png
+    background_image_dark: assets/images/splash_screen_dark.png
 
 
 

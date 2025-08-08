@@ -30,6 +30,7 @@ class _TasksTabState extends State<TasksTab> {
     userProvider = Provider.of<AuthUserProvider>(context);
     tasksProvider = Provider.of<TasksProvider>(context);
 
+
     if(tasksProvider.tasks.isEmpty){
       tasksProvider.refreshTasksAfterFilter(userProvider.currentUser!.id!);
     }
@@ -44,9 +45,10 @@ class _TasksTabState extends State<TasksTab> {
             monthPickerType: MonthPickerType.dropDown,
             dateFormatter: DateFormatter.fullDateDMonthAsStrY(),
           ),
-          dayProps: const EasyDayProps(
+          dayProps:  EasyDayProps(
 
             dayStructure: DayStructure.dayStrDayNumMonth,
+
             activeDayStyle: DayStyle(
               /*dayNumStyle: TextStyle(
                 color: Colors.red,
@@ -64,25 +66,18 @@ class _TasksTabState extends State<TasksTab> {
                   begin: Alignment.topCenter,
                   end: Alignment.bottomCenter,
                   colors: [
-                    AppColors.primaryLightColor,
+                    Theme.of(context).primaryColor,
                     AppColors.primaryLightColor,
                   ],
                 ),
               ),
             ),
-/*
             inactiveDayStyle: DayStyle(
               dayNumStyle: TextStyle(
-                color: Colors.orange,
-              ),
-              dayStrStyle: TextStyle(
-                color: Colors.yellow,
-              ),
-              monthStrStyle:  TextStyle(
-                color: Colors.green,
+                color: AppColors.secondaryTextColor,
+                fontSize: 20
               ),
             )
-*/
           ),
 
 
@@ -135,6 +130,9 @@ class _TasksTabState extends State<TasksTab> {
     final RenderBox overlay = Overlay.of(context).context.findRenderObject() as RenderBox;
     final Offset position = button.localToGlobal(Offset.zero , ancestor: overlay);
     showMenu(
+      color: provider.isDarkMode() ?
+        AppColors.primaryDarkColor :
+        AppColors.whiteColor,
         context: context,
         position: RelativeRect.fromLTRB(
             position.dx,
@@ -155,7 +153,11 @@ class _TasksTabState extends State<TasksTab> {
 
                 },
                 child: Text(AppLocalizations.of(context)!.all_tasks,
-                  style: Theme.of(context).textTheme.titleLarge,),
+                  style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                   color: provider.isDarkMode() ?
+                    AppColors.whiteColor :
+                    AppColors.secondaryTextColor,
+                  ),),
               )
           ),
           PopupMenuItem(
@@ -171,7 +173,11 @@ class _TasksTabState extends State<TasksTab> {
                   });
                 },
                 child: Text(AppLocalizations.of(context)!.pending_tasks,
-                  style: Theme.of(context).textTheme.titleLarge,),
+                  style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                    color: provider.isDarkMode() ?
+                    AppColors.whiteColor :
+                    AppColors.secondaryTextColor,
+                  ),),
               )
           ),
           PopupMenuItem(
@@ -187,7 +193,11 @@ class _TasksTabState extends State<TasksTab> {
 
                 },
                 child: Text(AppLocalizations.of(context)!.completed_tasks ,
-                style: Theme.of(context).textTheme.titleLarge,),
+                style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                  color: provider.isDarkMode() ?
+                  AppColors.whiteColor :
+                  AppColors.secondaryTextColor,
+                ),),
               )
           ),
         ]);

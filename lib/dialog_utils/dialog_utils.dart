@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:tick_done_app/providers/app_config_provider.dart';
 import 'package:tick_done_app/theming/app_colors.dart';
 
 class DialogUtils {
-  static showLoading({required BuildContext context, required String message}) {
+  static showLoading({required BuildContext context, required String message ,
+  required AppConfigProvider provider}) {
     showDialog(
         barrierDismissible: false,
         context: context,
@@ -15,6 +17,7 @@ class DialogUtils {
                   padding: const EdgeInsets.all(8.0),
                   child: Text(
                     message,
+                    style: Theme.of(context).textTheme.titleLarge,
                   ),
                 ),
               ],
@@ -45,7 +48,7 @@ class DialogUtils {
             style: ElevatedButton.styleFrom(
               backgroundColor: Theme.of(context).primaryColor
             ),
-            child: Text(posActionName , style: Theme.of(context).textTheme.titleLarge?.copyWith(color: AppColors.darkTextColor))),
+            child: Text(posActionName , style: Theme.of(context).textTheme.titleLarge?.copyWith(color: AppColors.whiteColor))),
       );
     }
     if (negActionName != null) {
@@ -63,10 +66,14 @@ class DialogUtils {
         context: context,
         builder: (context) {
           return AlertDialog(
-            title: Text(title, style: Theme.of(context).textTheme.bodyMedium),
+            title: Text(title, style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+              color: AppColors.blackColor
+            )),
             content: Text(
               message,
-              style: Theme.of(context).textTheme.titleLarge,
+              style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                  color: AppColors.secondaryTextColor
+              )
             ),
             icon: icon,
             actions: actions,

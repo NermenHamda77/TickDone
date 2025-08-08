@@ -47,5 +47,14 @@
 "app_info": "App Information",
 "welcome_back": "Welcome back",
 "total_tasks": "Total Tasks",
-"change_password" : "Change Password"
+"change_password" : "Change Password",
+"confirm_delete_title" : "Confirm Delete",
+"confirm_delete_message" : "Are you sure you want to delete this task?",
+"task_is_deleted_successfully": "Task is deleted successfully",
+"delete" : "Delete",
+"tasks_completed_successfully" : "Task is completed successfully",
+"confirm_logout_title" : "Confirm Logout",
+"confirm_logout_message" : "Are you sure you want to log out ? ",
+"notifications_settings": "Notifications",
+"notifications_settings_desc": "Receive a reminder when a task's time arrives and it's not completed."
 }
